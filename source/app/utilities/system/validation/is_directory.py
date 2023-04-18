@@ -1,4 +1,4 @@
-import os
+import os.path
 
 def is_directory ( path ):
 

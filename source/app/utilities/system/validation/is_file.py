@@ -1,4 +1,4 @@
-import os
+import os.path
 import re
 
 def is_file ( path, type ):

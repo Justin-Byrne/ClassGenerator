@@ -5,7 +5,7 @@
 ![stars](https://img.shields.io/github/stars/Justin-Byrne/ClassGenerator)
 ![license](https://img.shields.io/github/license/Justin-Byrne/ClassGenerator)
 <img src="https://img.shields.io/badge/Python-3.11.2-blue" />
- 
+
 PlantUML class generator for JavaScript
 
 - [Installation](#installation)
@@ -46,22 +46,40 @@ Please [open an issue](https://github.com/Justin-Byrne/ClassGenerator/issues/new
 ├── docs
 │   ├── CHANGELOG.md
 │   └── commands.txt
-└── src
+└── source
     ├── app
     │   ├── BuildClass.py
     │   ├── core
     │   │   ├── generator.py
     │   │   └── linker.py
     │   └── utilities
+    │       ├── custom
+    │       │   ├── cleanup
+    │       │   │   └── clean_properties.py
+    │       │   └── validation
+    │       │       └── is_extension.py
     │       ├── system
+    │       │   ├── file
+    │       │   │   └── get_eof.py
     │       │   ├── get_command_type.py
     │       │   ├── get_commands.py
+    │       │   ├── list
+    │       │   │   ├── create_2d_list.py
+    │       │   │   └── entry_padding.py
+    │       │   ├── string
+    │       │   │   └── repeat_character.py
     │       │   └── validation
     │       │       ├── is_directory.py
     │       │       ├── is_file.py
     │       │       └── is_flag.py
     │       └── util.py
     └── tests
+        ├── cases
+        │   ├── source
+        │   │   ├── class-ext-docstring.js
+        │   │   ├── class-ext.js
+        │   │   └── class.js
+        │   └── test-file.txt
         └── tests.py
 ```
 
