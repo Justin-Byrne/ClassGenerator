@@ -73,26 +73,21 @@ class Generator:
 
 		self.get_files ( )
 
+		# process files
+
 	#### 	GETTERS 	########################################
 
 	def get_files ( self ):
 
-		if ( Util.is_file ( self.arguments [ 'source' ] ) ):
+		if ( Util.is_file ( self.arguments [ 'source' ] ) ): 					# If: source is file
 
 			self.files.append ( self.arguments [ 'source' ] )
 
-		elif ( Util.is_directory ( self.arguments [ 'source' ] ) ):
+		elif ( Util.is_directory ( self.arguments [ 'source' ] ) ): 			# If: source is directory
 
-			if 'omit_files' in self.arguments.keys ( ):
+			self.files = Util.get_files ( self.arguments [ 'source' ], '.js', self.arguments [ 'omit_files' ] if 'omit_files' in self.arguments.keys ( ) else '' )
 
-				self.files = Util.get_files ( self.arguments [ 'source' ], '.js', self.arguments [ 'omit_files'] )
-
-			else:
-
-				self.files = Util.get_files ( self.arguments [ 'source' ], '.js' )
-
-
-	#### 	~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  	####
+	# -------------------------------------------------------- #
 
 	def remove_elements ( self ):
 
@@ -296,4 +291,3 @@ class Generator:
 			writer.write ( self.diagram [ 'master' ] )
 
 			print ( '>>  [ output ] ', output_directory )
-

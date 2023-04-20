@@ -46,5 +46,8 @@ def get_files ( path, type, omissions = '' ):
 
 					result.append ( f"{root}/{entry}" )
 
+	# for item in result:
+
+		# print ( item )
 
 	return result

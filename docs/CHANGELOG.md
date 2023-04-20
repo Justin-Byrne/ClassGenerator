@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.3.1] - 2023-04-20
+### Changed
+- Refactored and refined get_files ( ) and generator
+- Updated README.md
+
 ## [0.3.0] - 2023-04-20
 ### Added
 - System utilities, get_files ( ), list_to_string ( ), parse_commands
@@ -36,7 +41,9 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-[0.3.0]: 2023-04-20 [CURRENT REVISION] System utility additions, and general revisions
+[0.3.1]: 2023-04-20 [CURRENT REVISION] Minor refactoring
+
+[0.3.0]: 2023-04-20 [4dbb4d9](https://github.com/Justin-Byrne/ClassGenerator/commit/4dbb4d9) System utility additions, and general revisions
 
 [0.2.0]: 2023-04-17 [7968397](https://github.com/Justin-Byrne/ClassGenerator/commit/7968397) Further utility implementation, and general revision(s)
 

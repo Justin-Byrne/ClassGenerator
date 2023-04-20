@@ -44,8 +44,7 @@ Please [open an issue](https://github.com/Justin-Byrne/ClassGenerator/issues/new
 ├── LICENSE
 ├── README.md
 ├── docs
-│   ├── CHANGELOG.md
-│   └── commands.txt
+│   └── CHANGELOG.md
 └── source
     ├── app
     │   ├── BuildClass.py
