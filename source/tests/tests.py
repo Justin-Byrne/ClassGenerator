@@ -170,11 +170,19 @@ class TestUtil ( unittest.TestCase ):
 
 		self.assertEqual ( Util.entry_padding ( props, 10, 2 ), ERROR )
 
+	def test_list_to_string   ( self ): 						# 10
+
+		self.assertEqual ( Util.list_to_string ( [ 'one' ] ), 'one' )
+
+		self.assertEqual ( Util.list_to_string ( [ 'one', 'two' ] ), 'one two' )
+
+		self.assertEqual ( Util.list_to_string ( [ 'one', 'two', 'three' ] ), 'one two three' )
+
 	#### 	CUSTOM 	########################################
 
 	# VALIDATION
 
-	def test_is_extension       ( self ): 						# 10
+	def test_is_extension       ( self ): 						# 11
 
 		lines = [
 			'////    TITLE 01    ////',
@@ -205,7 +213,7 @@ class TestUtil ( unittest.TestCase ):
 
 	# CLEANUP
 
-	def test_clean_properties ( self ): 						# 11
+	def test_clean_properties   ( self ): 						# 12
 
 		props = [
 			( 'number',        '[prop1=25]', '',        'prop1', '25' ),

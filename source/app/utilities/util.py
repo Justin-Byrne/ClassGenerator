@@ -5,9 +5,11 @@ from .system.validation.is_flag      	import is_flag
 from .system.get_command_type        	import get_command_type
 from .system.get_commands 			 	import get_commands
 from .system.file.get_eof 			 	import get_eof
+from .system.file.get_files 			import get_files
 from .system.string.repeat_character 	import repeat_character
 from .system.list.create_2d_list  	 	import create_2d_list
 from .system.list.entry_padding 	 	import entry_padding
+from .system.list.list_to_string 		import list_to_string
 
 # CUSTOM
 from .custom.validation.is_extension    import is_extension
@@ -25,7 +27,7 @@ class Util:
 
 	def is_file 	 	 ( path,   type = None )  				: return is_file          ( path, type )
 
-	def is_flag      	 ( string, flag = '-'  )  				: return is_flag 	        ( string, flag )
+	def is_flag      	 ( string, flag = '-'  )  				: return is_flag 	      ( string, flag )
 
 	# COMMAND
 
@@ -37,6 +39,8 @@ class Util:
 
 	def get_eof 		 ( file ) 				  				: return get_eof          ( file )
 
+	def get_files 		 ( path, type, omissions = '' ) 		: return get_files        ( path, type, omissions )
+
 	# STRING
 
 	def repeat_character ( character, times = 0 ) 				: return repeat_character ( character, times )
@@ -46,6 +50,8 @@ class Util:
 	def create_2d_list   ( depth ) 				  				: return create_2d_list   ( depth )
 
 	def entry_padding    ( tuple_list, padding = 3, entry = 0 ) : return entry_padding 	  ( tuple_list, padding, entry )
+
+	def list_to_string   ( list ) 								: return list_to_string   ( list )
 
 	#### 	CUSTOM 	########################################
 

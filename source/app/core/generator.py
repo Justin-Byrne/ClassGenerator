@@ -1,63 +1,98 @@
-class ClassGenerator:
+import os
+import re
+
+from utilities.util 					import Util
+from utilities.system.file.get_files 	import get_files
+
+def view_arguments ( arguments ):
+
+	print ( '-' * 100 )
+
+	print ( "Flag: \t\t",      arguments [ 'flag'        ] )
+
+	print ( "Source: \t",      arguments [ 'source'      ] )
+
+	print ( "Destination: \t", arguments [ 'destination' ] )
+
+	print ( '. ' * 50 )
+
+	for i, argument in enumerate ( arguments ):
+
+		print ( f"{i}: ", argument )
+
+	print ( '-' * 100 )
+
+def view_files ( files ):
+
+	print ( '-' * 100 )
+
+	print ( 'FILES' )
+
+	for file in files:
+
+		print ( file )
+
+	print ( '-' * 100 )
+
+class Generator:
 
 	def __init__( self, arguments ):
 
 		#### 	GLOBALS 	################################
 
-		# code ...
+		self.arguments = arguments
+
+		self.files     = [ ]
+
+		self.diagram = {
+			'class':      None,
+			'properties': [ ],
+			'setters':    [ ],
+			'getters':    [ ],
+			'extra':      [ ],
+			'master':     None
+		}
+
+		self.tags    = {
+      		'start':      '@startuml',
+	  		'properties': '',
+	  		'setters':    '__ Setter __',
+	  		'getters':    '__ Getter __',
+	  		'end':        '@enduml'
+		}
 
 		#### 	INITIALIZE 	################################
 
-		# init ...
+		view_arguments ( arguments )
 
-	#### 	CLEANUP 	########################################
-
-	def cleanup_properties ( self ):
-
-		result = self.create_2d_list ( len ( self.diagram [ 'properties' ] ) )
-
-		prop   = [ ]
-
-		i      = 0
-
-
-		for property in self.diagram [ 'properties' ]:
-
-			property = property [ 0:2 ] 										# Trim: property
-
-
-			if property [ 0 ] == 'HTMLCanvasElement': 							# Replace: 'HTMLCanvasElement' -> 'HTMLCE'
-
-				prop       = list ( property )
-
-				prop [ 0 ] = 'HTMLCE'
-
-				property   = tuple ( prop )
-
-
-			if re.search ( self.regex [ 'default' ], property [ 1 ] ): 			# Locate: Default values & modify
-
-				temp = re.search ( self.regex [ 'default' ], property [ 1 ] )
-
-				prop       = list ( property )
-
-				prop [ 1 ] = f"{temp [ 1 ]}[<color:orangered>{temp [ 2 ]}</color>]"
-
-				property   = tuple ( prop )
-
-
-			result [ i ] = list ( property )
-
-			i += 1
-
-
-		self.diagram [ 'properties' ] = result 									# Populate: properties in diagram
-
-	def cleanup_extras ( self ):
-
-		self.diagram [ 'extra' ] = [ x for x in self.diagram [ 'extra' ] if x != [] ]
+		self.init ( )
 
 	#### 	INITIATORS 	########################################
+
+	def init ( self ):
+
+		self.get_files ( )
+
+	#### 	GETTERS 	########################################
+
+	def get_files ( self ):
+
+		if ( Util.is_file ( self.arguments [ 'source' ] ) ):
+
+			self.files.append ( self.arguments [ 'source' ] )
+
+		elif ( Util.is_directory ( self.arguments [ 'source' ] ) ):
+
+			if 'omit_files' in self.arguments.keys ( ):
+
+				self.files = Util.get_files ( self.arguments [ 'source' ], '.js', self.arguments [ 'omit_files'] )
+
+			else:
+
+				self.files = Util.get_files ( self.arguments [ 'source' ], '.js' )
+
+
+	#### 	~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  	####
 
 	def remove_elements ( self ):
 
@@ -261,3 +296,4 @@ class ClassGenerator:
 			writer.write ( self.diagram [ 'master' ] )
 
 			print ( '>>  [ output ] ', output_directory )
+

@@ -64,21 +64,3 @@ def clean_properties ( properties, substitutions ):
 
 
 	return result 												# Populate: properties in diagram
-
-# props = [
-# 	( 'number',        '[prop1=25]', '',        'prop1', '25' ),
-# 	( 'string',        'prop0',      'prop0',   '',      ''   ),
-# 	( 'boolean',       'active',     'active',  '',      ''   ),
-# 	( 'Special',       'special',    'special', '',      ''   ),
-# 	( 'CustomObject',  'object0',    'object0', '',      ''   ),
-# 	( 'SpecialObject', 'object1',    'object1', '',      ''   ),
-# 	( 'HTMLElement',   'element',    'element', '',      ''   )
-# ]
-
-# subs = [
-# 	( 'CustomObject',  'CO'   ),
-# 	( 'SpecialObject', 'SO'   ),
-# 	( 'HTMLElement',   'HTMLE')
-# ]
-
-# print ( cleanup_properties ( props, subs ) )

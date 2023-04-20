@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.3.0] - 2023-04-20
+### Added
+- System utilities, get_files ( ), list_to_string ( ), parse_commands
+- Expanded test cases
+
+### Changed
+- Refactored clean_properties ( ), get_commands ( ), and repeat_character
+
 ## [0.2.0] - 2023-04-17
 ### Added
 - Custom utilities, clean_properties ( ) and is_extension ( )
@@ -28,7 +36,9 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-[0.2.0]: 2023-04-17 [CURRENT REVISION] Further utility implementation, and general revision(s)
+[0.3.0]: 2023-04-20 [CURRENT REVISION] System utility additions, and general revisions
+
+[0.2.0]: 2023-04-17 [7968397](https://github.com/Justin-Byrne/ClassGenerator/commit/7968397) Further utility implementation, and general revision(s)
 
 [0.1.0]: 2023-04-11 [f9b479d](https://github.com/Justin-Byrne/ClassGenerator/commit/f9b479d) Core application files added
 

@@ -2,7 +2,7 @@ ERROR = -1
 
 def repeat_character ( character, times ):
 
-	#### 	ERROR HABDLING 	########
+	#### 	ERROR HABDLING 	################################
 
 	if len ( character ) != 1:
 
@@ -17,7 +17,6 @@ def repeat_character ( character, times ):
 
 		return ERROR
 
-	#### 	ERROR HABDLING 	########
-
+	#### 	LOGIC 	########################################
 
 	return character * times
