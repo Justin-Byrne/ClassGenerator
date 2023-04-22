@@ -1,4 +1,54 @@
 import os
+import re
+
+#### 	TEMPORARY DUPLICATION 	############################
+
+ERROR = -1
+
+def is_js_class ( file ):
+
+	metrics = {
+		'start'  : None,
+		'open'   : None,
+		'column' : None
+	}
+
+
+	with open ( file, 'r' ) as reader:
+
+		data = reader.readlines ( )
+
+		for i, line in enumerate ( data ):
+
+			if re.search ( r'class\s*\w+', line ) and metrics [ 'start' ] == None:
+
+				metrics [ 'start' ] = i
+
+				metrics [ 'column' ] = line.find ( 'c' )
+
+
+			if re.search ( r'{', line  ) and metrics [ 'open' ]  == None:
+
+				metrics [ 'open' ]  = i
+
+
+			if metrics [ 'start' ] != None and metrics [ 'open' ] != None:
+
+				if ( metrics [ 'start' ] + 1 ) < metrics [ 'open' ]:
+
+					return ERROR
+
+
+			if metrics [ 'column' ] != None:
+
+				if line.find ( '}' ) == metrics [ 'column' ]:
+
+					return True
+
+
+	return False
+
+#### 	TEMPORARY DUPLICATION 	############################
 
 def get_files ( path, type, omissions = '' ):
 
@@ -7,8 +57,6 @@ def get_files ( path, type, omissions = '' ):
 	#### 	FUNCTIONS 	####################################
 
 	def filter_omissions ( ):
-
-		# for omission in self.arguments [ 'omit_files' ].split ( '|' ):
 
 		for omission in omissions.split ( '|' ):
 
@@ -28,9 +76,10 @@ def get_files ( path, type, omissions = '' ):
 
 		for entry in file:
 
-			if type in entry:
+			record = f"{root}/{entry}"
 
-				print ( 'omissions: ', omissions )
+
+			if type in entry:
 
 				if omissions:
 
@@ -40,14 +89,22 @@ def get_files ( path, type, omissions = '' ):
 
 					else:
 
-						result.append ( f"{root}/{entry}" )
+						if is_js_class ( record ):
 
+							result.append ( record )
+
+						else:
+
+							continue
 				else:
 
-					result.append ( f"{root}/{entry}" )
+					if is_js_class ( record ):
 
-	# for item in result:
+						result.append ( record )
 
-		# print ( item )
+					else:
+
+						continue
+
 
 	return result

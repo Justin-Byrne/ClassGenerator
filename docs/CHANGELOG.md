@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.3.2] - 2023-04-21
+### Added
+- Custom utilities, is_js_class ( )
+
+### Changed
+- Refactored and refined get_files ( ) and generator
+
 ## [0.3.1] - 2023-04-20
 ### Changed
 - Refactored and refined get_files ( ) and generator
@@ -41,7 +48,9 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-[0.3.1]: 2023-04-20 [CURRENT REVISION] Minor refactoring
+[0.3.2]: 2023-04-21 [CURRENT REVISION] Implemented further source validation
+
+[0.3.1]: 2023-04-20 [3251d7a](https://github.com/Justin-Byrne/ClassGenerator/commit/3251d7a) Minor refactoring
 
 [0.3.0]: 2023-04-20 [4dbb4d9](https://github.com/Justin-Byrne/ClassGenerator/commit/4dbb4d9) System utility additions, and general revisions
 

@@ -56,7 +56,8 @@ Please [open an issue](https://github.com/Justin-Byrne/ClassGenerator/issues/new
     │       │   ├── cleanup
     │       │   │   └── clean_properties.py
     │       │   └── validation
-    │       │       └── is_extension.py
+    │       │       ├── is_extension.py
+    │       │       └── is_js_class.py
     │       ├── system
     │       │   ├── file
     │       │   │   ├── get_eof.py

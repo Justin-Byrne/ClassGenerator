@@ -13,6 +13,7 @@ from .system.list.list_to_string 		import list_to_string
 
 # CUSTOM
 from .custom.validation.is_extension    import is_extension
+from .custom.validation.is_js_class 	import is_js_class
 from .custom.cleanup.clean_properties   import clean_properties
 
 class Util:
@@ -58,6 +59,8 @@ class Util:
 	# VALIDATION
 
 	def is_extension     ( line, list ) 		  				: return is_extension     ( line, list )
+
+	def is_js_class      ( file ) 								: return is_js_class      ( file )
 
 	# CLEANUP
 

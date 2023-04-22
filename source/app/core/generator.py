@@ -26,7 +26,7 @@ def view_files ( files ):
 
 	print ( '-' * 100 )
 
-	print ( 'FILES' )
+	print ( '>>> FILES' )
 
 	for file in files:
 
@@ -73,6 +73,10 @@ class Generator:
 
 		self.get_files ( )
 
+		# view_files ( self.files )
+
+		self.load_files ( )
+
 		# process files
 
 	#### 	GETTERS 	########################################
@@ -86,6 +90,16 @@ class Generator:
 		elif ( Util.is_directory ( self.arguments [ 'source' ] ) ): 			# If: source is directory
 
 			self.files = Util.get_files ( self.arguments [ 'source' ], '.js', self.arguments [ 'omit_files' ] if 'omit_files' in self.arguments.keys ( ) else '' )
+
+	def load_files ( self ):
+
+		for file in self.files:
+
+			self.process ( file )
+
+	def process ( self, file ):
+
+		print ( ">>> processing \n", file )
 
 	# -------------------------------------------------------- #
 

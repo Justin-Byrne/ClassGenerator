@@ -182,7 +182,7 @@ class TestUtil ( unittest.TestCase ):
 
 	# VALIDATION
 
-	def test_is_extension       ( self ): 						# 11
+	def test_is_extension     ( self ): 						# 11
 
 		lines = [
 			'////    TITLE 01    ////',
@@ -211,9 +211,21 @@ class TestUtil ( unittest.TestCase ):
 			self.assertTrue  ( Util.is_extension ( line, extension_titles ) )
 			self.assertFalse ( Util.is_extension ( line, f"extension_titlesA" ) )
 
+	def test_is_js_class      ( self ): 						# 12
+
+		files = [
+			'cases/source/class.js',
+			'cases/source/class-ext.js',
+			'cases/source/class-ext-docstring.js'
+		]
+
+		for file in files:
+
+			self.assertTrue ( Util.is_js_class ( file ) )
+
 	# CLEANUP
 
-	def test_clean_properties   ( self ): 						# 12
+	def test_clean_properties ( self ): 						# 13
 
 		props = [
 			( 'number',        '[prop1=25]', '',        'prop1', '25' ),
