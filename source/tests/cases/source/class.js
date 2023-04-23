@@ -7,6 +7,8 @@ class ClassName
 
     _element = undefined;
 
+    _prop4 = "string";
+
     constructor ( ) { }
 
 

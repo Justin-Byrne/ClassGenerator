@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.4.2] - 2023-04-23
+### Added
+- Implemented various functions to parse JavaScript document data
+  - get_header ( ), get_class ( ), get_properties ( ), get_setters ( ), get_getters ( )
+
+### Changed
+- Refactored and refined clean_properties ( ), get_files ( ) and generator
+
 ## [0.3.2] - 2023-04-21
 ### Added
 - Custom utilities, is_js_class ( )
@@ -48,7 +56,9 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-[0.3.2]: 2023-04-21 [CURRENT REVISION] Implemented further source validation
+[0.4.2]: 2023-04-23 [CURRENT REVISION] Implemented various functions to parse JavaScript document data
+
+[0.3.2]: 2023-04-21 [28b0d8e](https://github.com/Justin-Byrne/ClassGenerator/commit/28b0d8e) Implemented further source validation
 
 [0.3.1]: 2023-04-20 [3251d7a](https://github.com/Justin-Byrne/ClassGenerator/commit/3251d7a) Minor refactoring
 

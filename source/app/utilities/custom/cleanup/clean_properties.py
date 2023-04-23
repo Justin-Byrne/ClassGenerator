@@ -1,7 +1,9 @@
 import sys
 import re
 
-#### 	TEMPORARY DUPLICATION 	############################
+# from utilities.system.list.create_2d_list    import create_2d_list
+
+#### 	TEMPORARY DUPLICATION ##############################
 
 ERROR = -1
 
@@ -20,7 +22,7 @@ def create_2d_list ( depth ):
 
 	return [ [ ] for i in range ( depth ) ]
 
-#### 	TEMPORARY DUPLICATION 	############################
+#### 	TEMPORARY DUPLICATION ##############################
 
 def clean_properties ( properties, substitutions ):
 

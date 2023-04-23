@@ -1,7 +1,9 @@
 import os
 import re
 
-#### 	TEMPORARY DUPLICATION 	############################
+# from utilities.custom.validation.is_js_class 	import is_js_class
+
+#### 	TEMPORARY DUPLICATION ##############################
 
 ERROR = -1
 
@@ -48,7 +50,7 @@ def is_js_class ( file ):
 
 	return False
 
-#### 	TEMPORARY DUPLICATION 	############################
+#### 	TEMPORARY DUPLICATION ##############################
 
 def get_files ( path, type, omissions = '' ):
 

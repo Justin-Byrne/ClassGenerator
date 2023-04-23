@@ -1,7 +1,7 @@
 import sys
 
-from utilities.util import Util
-from core.generator import Generator
+from utilities.util    import Util
+from core.generator    import Generator
 
 ERROR = -1
 
