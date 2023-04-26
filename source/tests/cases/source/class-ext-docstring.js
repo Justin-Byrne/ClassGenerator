@@ -126,25 +126,69 @@ class ClassName
 
     ////    VALIDATION  ////////////////////////////////////
 
+        /**
+         * Validate something
+         * @return          {boolean}                                   Description
+         * @see             {@link to.something}
+         */
         _isSomething ( ) { }
 
+        /**
+         * Validate other
+         * @return          {boolean}                                   Description
+         * @see             {@link to.other}
+         */
         _isOther     ( ) { }
 
+        /**
+         * Validate than
+         * @return          {boolean}                                   Description
+         * @see             {@link to.than}
+         */
         _isThan      ( ) { }
 
     ////    UTILITIES   ////////////////////////////////////
 
+        /**
+         * Get utility0
+         * @return          {Object}                                    Description
+         * @see             {@link to.utility0}
+         */
         _utility0 ( ) { }
 
+        /**
+         * Get utility1
+         * @return          {Object}                                    Description
+         * @see             {@link to.utility1}
+         */
         _utility1 ( ) { }
 
+        /**
+         * Get utility2
+         * @return          {Object}                                    Description
+         * @see             {@link to.utility2}
+         */
         _utility2 ( ) { }
 
+        /**
+         * Get utility3
+         * @return          {Object}                                    Description
+         * @see             {@link to.utility3}
+         */
         _utility3 ( ) { }
 
     ////    SPECIAL    ////////////////////////////////////////
 
+        /**
+         * Do special0
+         * @see             {@link to.special0}
+         */
         special0 ( ) { }
 
+
+        /**
+         * Do special1
+         * @see             {@link to.special0}
+         */
         special1 ( ) { }
 }

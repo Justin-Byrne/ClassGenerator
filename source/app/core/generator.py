@@ -22,50 +22,30 @@ def view_arguments ( arguments ):
 
 	print ( '-' * 100 )
 
-def view_files ( files ):
-
-	print ( '-' * 100 )
-
-	print ( '>>> FILES' )
-
-	for file in files:
-
-		print ( file )
-
-	print ( '-' * 100 )
-
 class Generator:
 
 	def __init__( self, arguments ):
 
 		#### 	GLOBALS 	################################
 
-		self.arguments = arguments
+		self.arguments   = arguments
 
-		self.files     = [ ]
+		self.files       = [ ]
 
-		self.doc_brief = None
+		self.output_path = None
 
-		self.diagram = {
-			'class':      None,
-			'properties': [ ],
-			'setters':    [ ],
-			'getters':    [ ],
-			'extra':      [ ],
-			'master':     None
-		}
+		self.diagram     = { }
 
-		self.tags    = {
-      		'start':      '@startuml',
+		self.tags = {
 	  		'properties': '',
 	  		'setters':    '__ Setter __',
 	  		'getters':    '__ Getter __',
-	  		'end':        '@enduml'
+	  		'utilities':  '__ Utility __'
 		}
 
 		#### 	INITIALIZE 	################################
 
-		view_arguments ( arguments )
+		# view_arguments ( arguments )
 
 		self.init ( )
 
@@ -73,9 +53,9 @@ class Generator:
 
 	def init ( self ):
 
-		self.get_files  ( )
+		self.get_files ( )
 
-		self.load_files ( )
+		self.compile   ( )
 
 	#### 	GETTERS 	########################################
 
@@ -87,21 +67,63 @@ class Generator:
 
 		elif ( Util.is_directory ( self.arguments [ 'source' ] ) ): 			# If: source is directory
 
-			self.files = Util.get_files ( self.arguments [ 'source' ], '.js', self.arguments [ 'omit_files' ] if 'omit_files' in self.arguments.keys ( ) else '' )
+			omissions = self.arguments [ 'omit_files' ] if 'omit_files' in self.arguments.keys ( ) else ''
 
-	def load_files ( self ):
+			self.files = Util.get_files ( self.arguments [ 'source' ], '.js', omissions )
+
+	def compile   ( self ):
 
 		for file in self.files:
 
 			self.process ( file )
 
-	def process ( self, file ):
+			self.render  ( file )
+
+	def process   ( self, file ):
+
+		self.diagram = {
+			'class':      None,
+			'brief': 	  None,
+			'properties': [ ],
+			'setters':    [ ],
+			'getters':    [ ],
+			'utilities':  [ ],
+			'master':     None
+		}
 
 		# print ( ">>> processing \n", file )
 
-		self.get_class   ( file )
+		self.get_class      ( file )
 
-		self.get_members ( file )
+		# print ( self.diagram [ 'class' ] )
+
+		self.get_properties ( file )
+
+		# for line in self.diagram [ 'properties' ]: print ( line )
+
+		self.get_setters    ( file )
+
+		# for line in self.diagram [ 'setters' ]: print ( line )
+
+		self.get_getters    ( file )
+
+		# for line in self.diagram [ 'getters' ]: print ( line )
+
+		self.get_utilities  ( file )
+
+		# for line in self.diagram [ 'utilities' ]: print ( line )
+
+	def render    ( self, file ):
+
+		self.prepare_file    ( file )
+
+		self.compose_header  ( )
+
+		self.compose_members ( )
+
+		self.compose_footer  ( )
+
+		self.save_output     ( )
 
 	#### 	GETTERS 	########################################
 
@@ -118,36 +140,22 @@ class Generator:
 
 			if re.search ( regex [ 'header' ], data ):
 
-				self.doc_brief = re.search ( regex [ 'header' ], data ).group ( 1 )
+				self.diagram [ 'brief' ] = re.search ( regex [ 'header' ], data ).group ( 1 )
 
-				self.diagram   [ 'class'  ] = re.search ( regex [ 'class'  ], data ).group ( 1 )
+				self.diagram [ 'class' ] = re.search ( regex [ 'class'  ], data ).group ( 1 )
 
 	def get_class      ( self, file ):
 
 		self.get_header ( file )
 
 
-		if self.diagram [ 'class' ] is None:
+		if self.diagram [ 'class' ] == None:
 
 			with open ( file, 'r' ) as reader:
 
 				data = reader.read ( )
 
 				self.diagram [ 'class' ] = re.search ( r'class\s*(\w+)[^{]+{', data ).group ( 1 )
-
-	def get_members    ( self, file ):
-
-		self.get_properties ( file )
-
-		# for line in self.diagram [ 'properties' ]: print ( line )
-
-		self.get_setters    ( file )
-
-		# for line in self.diagram [ 'setters' ]: print ( line )
-
-		self.get_getters    ( file )
-
-		# for line in self.diagram [ 'getters' ]: print ( line )
 
 	def get_properties ( self, file ):
 
@@ -186,11 +194,11 @@ class Generator:
 
 		#### 	FUNCTIONS 	################################
 
-		if self.doc_brief:
+		if self.diagram [ 'brief' ]:
 
 			list = [ ]
 
-			self.diagram [ 'properties' ] = re.findall ( regex [ 'docstring' ], self.doc_brief )
+			self.diagram [ 'properties' ] = re.findall ( regex [ 'docstring' ], self.diagram [ 'brief' ] )
 
 
 			for property in self.diagram [ 'properties' ]:
@@ -299,156 +307,124 @@ class Generator:
 
 			self.diagram [ 'getters' ] = list
 
-	# ........................................................ #
+	def get_utilities  ( self, file ):
 
-	def get_extras ( self, file ):
+		list  = [ ]
 
-		with open ( file, 'r' ) as reader:
+		temp  = [ ]
 
-			amount = len ( re.findall ( regex [ 'extras' ], reader.read ( ) ) ) - 1
+		regex = {
+			'docstring': r'@return\s*{(\w+)}[^\/]+\/\s*\b(?!return\b|let\b|this\b|if\b|switch\b|for\b)(\w+)\s*\([^\)]+\)',
+			'typical':   r'\s{2,4}\b(?!constructor\b|return\b|let\b|this\b|if\b|switch\b|for\b)(\w+)\s*\([^\)]+\)'
+		}
 
+		list  = re.findall ( regex [ 'docstring' ], open ( file, 'r' ).read ( ) )
 
-		self.diagram [ 'extra' ] = self.create_2d_list ( amount )
-
-		extra = [ ]
-
-
-		with open ( self.file, 'r' ) as reader:
-
-			lines = reader.readlines ( );
-
-			for line in lines:
-
-				self.counters.line += 1
+		temp  = re.findall ( regex [ 'typical'   ], open ( file, 'r' ).read ( ) )
 
 
-				if re.search ( self.regex [ 'extras' ], line ):
+		if list:
 
-					if self.omit_types ( line, self.extras_to_ignore, 'extras' ):
-
-						continue
+			list = [ tuple[::-1] for tuple in list ]
 
 
-					if ( len ( extra ) > 1 ):
+		if len ( temp ) > len ( list ):
 
-						self.diagram [ 'extra' ] [ self.counters.count ] = extra
+			for i in range ( len ( list ), -1, -1 ):
 
-						self.counters.count += 1
+				try:
 
-						extra = [ ]
+					if list [ i ] [ 0 ] == temp [ i ]:
 
+						del temp [ i ]
 
-					extra.append ( line )
+				except IndexError:
 
-				else:
-
-					if ( len ( extra ) > 0 ):
-
-						extra.append ( line )
+					pass
 
 
-				if self.counters.line > self.counters.EOF:
-
-					self.diagram [ 'extra' ] [ self.counters.count ] = extra
-
-
-		self.cleanup_extras ( )
+		self.diagram [ 'utilities' ] = ( list + temp )
 
 	#### 	RENDERERS 	########################################
 
-	def render_header ( self ):
+	def prepare_file    ( self, file ):
 
-		diagram  = f"{self.tags [ 'start' ]}\n\n"
-
-		diagram += "left to right direction\n"
+		filename = os.path.basename ( file ).split ( '/' ) [ -1 ].replace ( '.js', '' )
 
 
-		if len ( self.skinparam ) > 0:
-
-			for param in self.skinparam:
-
-				diagram += f"skinparam {param}\n"
+		self.output_path = f"{self.arguments [ 'destination' ]}/{filename}.txt"
 
 
-		diagram += f"\nclass {self.diagram [ 'class' ]} {{"
+		if Util.is_directory ( self.arguments [ 'destination' ] ) is False:
+
+			os.makedirs ( self.arguments [ 'destination' ] )
 
 
-		self.diagram [ 'master' ] = diagram
+		open ( self.output_path, 'w+' )
 
-	def render_member ( self, member ):
+	def compose_header  ( self ):
 
-		diagram = f"{self.tags [ member ]}\n"
-
-		grid    = self.grid_spacing ( self.diagram [ member ] )
-
-		padding = 3
-
-		i       = 0
+		data = f"@startuml\n\n"
 
 
-		for entry in self.diagram [ member ]:
+		if self.arguments [ 'skin_param' ]:
 
-			length  = ( max ( grid ) + padding ) - grid [ i ]
+			for skin in self.arguments [ 'skin_param' ]:
 
-			spacing = self.repeat_character ( ' ', length )
-
-
-			if entry [ 0 ] == 'number' or entry [ 0 ] == 'string' or entry [ 0 ] == 'boolean':
-
-				diagram += f"{entry [ 1 ]}{spacing}<color:gray>{{{entry [ 0 ]}}}</color>\n"
-
-			else:
-
-				diagram += f"{entry [ 1 ]}{spacing}{{{entry [ 0 ]}}}\n"
+				data += f"{skin}\n"
 
 
-			i += 1
+			data += f"\nclass {self.diagram [ 'class' ]} {{"
 
 
-		self.diagram [ 'master' ] += diagram
+		self.diagram [ 'master' ] = data
 
-	def render_extras ( self ):
+	def compose_members  ( self ):
 
-		diagram = ''
-
-		padding = 3
+		data = ''
 
 
-		for i in range ( len ( self.diagram [ 'extra' ] ) ):
+		for tag in self.tags:
 
-			extra_title  = re.search ( self.regex [ 'extras' ], self.diagram [ 'extra' ] [ i ] [ 0 ] ).group ( 1 )
+			if self.diagram [ tag ]:
 
-			diagram     += f"__ {extra_title} __\n"
+				data += f"{self.tags [ tag ]}\n"
 
-
-			if extra_title == 'PRIVATE':
-
-				methods = re.findall ( self.regex [ 'private' ], '\n'.join ( self.diagram [ 'extra' ] [ i ] ) )
-
-			else:
-
-				methods = re.findall ( self.regex [ 'methods' ], '\n'.join ( self.diagram [ 'extra' ] [ i ] ) )
+				grid = Util.entry_padding ( self.diagram [ tag ] )
 
 
-			for method in methods:
+				for i, entry in enumerate ( self.diagram [ tag ] ):
 
-				diagram += f"{method}\n"
+					if isinstance ( entry, tuple ):
+
+						spacing = Util.repeat_character ( ' ', grid [ i ] )
+
+						if entry [ 1 ] == 'number'  or \
+						   entry [ 1 ] == 'string'  or \
+						   entry [ 1 ] == 'boolean' or \
+						   entry [ 1 ] == 'Object':
+
+							data += f"{entry [ 0 ]}{spacing}<color:gray>{{{entry [ 1 ]}}}</color>\n"
+
+						else:
+
+							data += f"{entry [ 0 ]}{spacing}{{{entry [ 1 ]}}}\n"
+
+					else:
+
+						data += f"{entry}\n"
 
 
-		self.diagram [ 'master' ] += diagram
+		self.diagram [ 'master' ] += data
 
-	def render_footer ( self ):
+	def compose_footer  ( self ):
 
 		self.diagram [ 'master' ] += f"}}\n@enduml"
 
-	def render_output ( self ):
+	def save_output  ( self ):
 
-		file = re.findall ( r'(\w+)\.js', self.file )
-
-		output_directory = f"../docs/PlantUml/raw/_originals/{file [ 0 ]}.txt"
-
-		with open ( output_directory, 'w' ) as writer:
+		with open ( self.output_path, 'w' ) as writer:
 
 			writer.write ( self.diagram [ 'master' ] )
 
-			print ( '>>  [ output ] ', output_directory )
+			print ( ">>  [ output ] \n", f"{self.output_path}\n" )

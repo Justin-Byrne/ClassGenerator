@@ -38,8 +38,7 @@ def clean_properties ( properties, substitutions ):
 		property = property [ 0:2 ] 							# Trim: property
 
 
-		# property [ 0 ] : check substitutions
-		for substitution in substitutions:
+		for substitution in substitutions: 						# property [ 0 ] : check substitutions
 
 			if property [ 0 ] == substitution [ 0 ]:
 
@@ -50,8 +49,7 @@ def clean_properties ( properties, substitutions ):
 				property    = tuple ( props )
 
 
-		# property [ 1 ] : Check and modify default values
-		if re.search ( regex, property [ 1 ] ):
+		if re.search ( regex, property [ 1 ] ): 				# property [ 1 ] : Check and modify default values
 
 			temp        = re.search ( regex, property [ 1 ] )
 

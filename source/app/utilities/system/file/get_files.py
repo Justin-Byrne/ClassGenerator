@@ -58,9 +58,9 @@ def get_files ( path, type, omissions = '' ):
 
 	#### 	FUNCTIONS 	####################################
 
-	def filter_omissions ( ):
+	def filter_omissions ( omissions ):
 
-		for omission in omissions.split ( '|' ):
+		for omission in omissions:
 
 			entry_no_suffix = os.path.splitext ( entry ) [ 0 ]
 
@@ -85,7 +85,7 @@ def get_files ( path, type, omissions = '' ):
 
 				if omissions:
 
-					if filter_omissions ( ):
+					if filter_omissions ( omissions ):
 
 						continue
 

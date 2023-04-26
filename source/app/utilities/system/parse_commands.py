@@ -12,44 +12,72 @@ def parse_commands ( commands ):
 		'destination': None
 	}
 
-	special_flags = {
-		'omit_files': r'-o\s*([^\s]+)'
+	regex_flags = {
+		'omit_files': r'-o\s*([^\s]+)|--omit\s*([^\s]+)',
+		'skin_param': r'-s\s*([^\s]+)|--skin\s*([^\s]+)'
 	}
 
 	#### 	FUNCTIONS 	####################################
 
-	def get_special_flags (       ):
+	def get_special_flags ( ):
 
 		command_string = list_to_string ( commands )
 
 
-		for flag in special_flags:
+		for flag in regex_flags:
 
-			if re.search ( special_flags [ flag ], command_string ):
+			list = [ ]
 
-				arguments.update ( { flag: re.findall ( special_flags [ flag ], command_string ) [ 0 ] } )
+			if re.search ( regex_flags [ flag ], command_string ):
 
-	def set_flag          ( value ):
+				flag_commands = re.findall ( regex_flags [ flag ], command_string ) [ 0 ]
 
-		if get_command_type ( value ) == 'flag':
+				flag_commands = [    entry for entry in flag_commands if entry != ''    ]
 
-			if arguments [ 'flag' ] is None:
 
-				arguments [ 'flag' ] = value
+				for command in flag_commands:
 
-	def set_io            ( value ):
+					list.append ( command.replace ( '/', ' ' ) )
 
-		if get_command_type ( value ) == 'file' or get_command_type ( value ) == 'directory':
 
-			if arguments [ 'source' ] is None:
-
-				arguments [ 'source' ] = value
+				arguments.update ( { flag: list [ 0 ].split ( '|' ) } )
 
 			else:
 
-				if arguments [ 'destination' ] is None:
+				config_regex = {
+					'omit_files': r'FILE OMISSIONS',
+					'skin_param': r'SKIN PARAM'
+				}
 
-					arguments [ 'destination' ] = value
+				lines   = open ( './config/config.txt', 'r' ).readlines ( )
+
+				capture = False
+
+
+				for line in lines:
+
+					if capture and line [ 0 ] == '\n':
+
+						break
+
+
+					if re.search ( config_regex [ flag ], line ):
+
+						capture = True
+
+						continue
+
+
+					if capture:
+
+						if line [ 0 ] == '#': continue
+
+						else: list.append ( line.replace ( '\n', '' ) )
+
+
+					if len ( list ) > 0:
+
+						arguments.update ( { flag: list } )
 
 	#### 	LOGIC	########################################
 
@@ -58,15 +86,28 @@ def parse_commands ( commands ):
 
 	for i in range ( 1, len ( commands ) ):
 
-		# SET: INPUT & OUTPUT
-		if get_command_type ( commands [ i ] ) == 'file' or get_command_type ( commands [ i ] ) == 'directory':
+		command = commands [ i ]
 
-			set_io ( commands [ i ] )
+		# SET: INPUT & OUTPUT
+		if arguments [ 'source' ] is None:
+
+			if get_command_type ( command ) == 'file' or \
+			   get_command_type ( command ) == 'directory':
+
+			   arguments [ 'source' ] = command
+
+		else:
+
+			if re.search ( r'(\/\w+){1,}', command ):
+
+				arguments [ 'destination' ] = command
 
 		# SET: FLAG
-		if get_command_type ( commands [ i ] ) == 'flag':
+		if get_command_type ( command ) == 'flag':
 
-			set_flag ( commands [ i ] )
+			if arguments [ 'flag' ] is None:
+
+				arguments [ 'flag' ] = command
 
 
 	return arguments

@@ -48,6 +48,8 @@ Please [open an issue](https://github.com/Justin-Byrne/ClassGenerator/issues/new
 └── source
     ├── app
     │   ├── BuildClass.py
+    │   ├── config
+    │   │   └── config.txt
     │   ├── core
     │   │   ├── generator.py
     │   │   └── linker.py

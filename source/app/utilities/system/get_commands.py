@@ -30,13 +30,18 @@ def get_commands   ( commands ):
 
 	if arguments [ 'source' ] != None and arguments [ 'destination' ] == None: 						# IF ONLY SOURCE IS PRESENT MIRROR AS DESTINATION
 
+		if arguments [ 'source' ] [ len ( arguments [ 'source' ] ) - 1 ] == '/':
+
+			arguments [ 'source' ] = arguments [ 'source' ] [ :-1 ]
+
+
 		if is_directory ( arguments [ 'source'] ):
 
-			arguments [ 'destination' ] = arguments [ 'source' ]
+			arguments [ 'destination' ] = f"{arguments [ 'source' ]}/output"
 
 		elif is_file ( arguments [ 'source' ], None ):
 
-			arguments [ 'destination' ] = os.path.dirname ( arguments [ 'source' ] )
+			arguments [ 'destination' ] = f"{os.path.dirname ( arguments [ 'source' ] )}/output"
 
 
 	return arguments

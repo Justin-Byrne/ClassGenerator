@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.5.2] - 2023-04-26
+- Implemented configuration file and parsing methods
+
+### Changed
+- Refactored and refined
+  - clean_properties ( ), get_files ( ), get_commands ( ), and parse_commands ( )
+
 ## [0.4.2] - 2023-04-23
 ### Added
 - Implemented various functions to parse JavaScript document data
@@ -56,7 +63,9 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-[0.4.2]: 2023-04-23 [CURRENT REVISION] Implemented various functions to parse JavaScript document data
+[0.5.2]: 2023-04-26 [CURRENT REVISION] Implemented configuration file and parsing methods
+
+[0.4.2]: 2023-04-23 [4a78b19](https://github.com/Justin-Byrne/ClassGenerator/commit/4a78b19) Implemented various functions to parse JavaScript document data
 
 [0.3.2]: 2023-04-21 [28b0d8e](https://github.com/Justin-Byrne/ClassGenerator/commit/28b0d8e) Implemented further source validation
 
