@@ -21,6 +21,7 @@ _dump/
 build
 __pycache__
 commands.txt
+test-generator.py
 
 ## Docs
 html-docs

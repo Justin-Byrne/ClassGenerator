@@ -4,24 +4,6 @@ import re
 from utilities.util 					import Util
 from utilities.system.file.get_files 	import get_files
 
-def view_arguments ( arguments ):
-
-	print ( '-' * 100 )
-
-	print ( "Flag: \t\t",      arguments [ 'flag'        ] )
-
-	print ( "Source: \t",      arguments [ 'source'      ] )
-
-	print ( "Destination: \t", arguments [ 'destination' ] )
-
-	print ( '. ' * 50 )
-
-	for i, argument in enumerate ( arguments ):
-
-		print ( f"{i}: ", argument )
-
-	print ( '-' * 100 )
-
 class Generator:
 
 	def __init__( self, arguments ):
@@ -44,8 +26,6 @@ class Generator:
 		}
 
 		#### 	INITIALIZE 	################################
-
-		# view_arguments ( arguments )
 
 		self.init ( )
 
@@ -91,27 +71,15 @@ class Generator:
 			'master':     None
 		}
 
-		# print ( ">>> processing \n", file )
-
 		self.get_class      ( file )
-
-		# print ( self.diagram [ 'class' ] )
 
 		self.get_properties ( file )
 
-		# for line in self.diagram [ 'properties' ]: print ( line )
-
 		self.get_setters    ( file )
-
-		# for line in self.diagram [ 'setters' ]: print ( line )
 
 		self.get_getters    ( file )
 
-		# for line in self.diagram [ 'getters' ]: print ( line )
-
 		self.get_utilities  ( file )
-
-		# for line in self.diagram [ 'utilities' ]: print ( line )
 
 	def render    ( self, file ):
 
@@ -349,15 +317,27 @@ class Generator:
 
 	def prepare_file    ( self, file ):
 
-		filename = os.path.basename ( file ).split ( '/' ) [ -1 ].replace ( '.js', '' )
+		if re.search ( r'\w.+\.txt', self.arguments [ 'destination' ] ):
+
+			directory = os.path.dirname ( self.arguments [ 'destination' ] )
+
+			self.output_path = f"{self.arguments [ 'destination' ]}"
 
 
-		self.output_path = f"{self.arguments [ 'destination' ]}/{filename}.txt"
+			if Util.is_directory ( directory ) is False:
+
+				os.makedirs ( directory )
+
+		else:
+
+			filename = os.path.basename ( file ).split ( '/' ) [ -1 ].replace ( '.js', '' )
+
+			self.output_path = f"{self.arguments [ 'destination' ]}/{filename}.txt"
 
 
-		if Util.is_directory ( self.arguments [ 'destination' ] ) is False:
+			if Util.is_directory ( self.arguments [ 'destination' ] ) is False:
 
-			os.makedirs ( self.arguments [ 'destination' ] )
+				os.makedirs ( self.arguments [ 'destination' ] )
 
 
 		open ( self.output_path, 'w+' )
@@ -367,19 +347,21 @@ class Generator:
 		data = f"@startuml\n\n"
 
 
-		if self.arguments [ 'skin_param' ]:
+		if 'skin_param' in self.arguments.keys ( ):
 
 			for skin in self.arguments [ 'skin_param' ]:
 
 				data += f"{skin}\n"
 
+			data += "\n"
 
-			data += f"\nclass {self.diagram [ 'class' ]} {{"
+
+		data += f"class {self.diagram [ 'class' ]} {{"
 
 
 		self.diagram [ 'master' ] = data
 
-	def compose_members  ( self ):
+	def compose_members ( self ):
 
 		data = ''
 
@@ -421,7 +403,7 @@ class Generator:
 
 		self.diagram [ 'master' ] += f"}}\n@enduml"
 
-	def save_output  ( self ):
+	def save_output     ( self ):
 
 		with open ( self.output_path, 'w' ) as writer:
 

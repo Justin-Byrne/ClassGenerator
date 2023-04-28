@@ -1,50 +1,88 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.5.5] - 2023-04-27
+### Added
+- Unit tests for main app `BuildClass.py`
+
+### Fixed
+- `skin_param` properly populates when available
+- `prepare_file ( )` to create proper file and directory path(s)
+
 ## [0.5.2] - 2023-04-26
 - Implemented configuration file and parsing methods
 
 ### Changed
-- Refactored and refined
-  - clean_properties ( ), get_files ( ), get_commands ( ), and parse_commands ( )
+- Refactored and refined:
+  - `clean_properties ( )`
+  - `get_files ( )`
+  - `get_commands ( )`
+  - `parse_commands ( )`
 
 ## [0.4.2] - 2023-04-23
 ### Added
-- Implemented various functions to parse JavaScript document data
-  - get_header ( ), get_class ( ), get_properties ( ), get_setters ( ), get_getters ( )
+- Implemented various functions to parse JavaScript document data:
+  - `get_header ( )`
+  - `get_class ( )`
+  - `get_properties ( )`
+  - `get_setters ( )`
+  - `get_getters ( )`
 
 ### Changed
-- Refactored and refined clean_properties ( ), get_files ( ) and generator
+- Refactored and refined:
+  - `clean_properties ( )`
+  - `get_files ( )`
+  - `generator ( )`
 
 ## [0.3.2] - 2023-04-21
 ### Added
-- Custom utilities, is_js_class ( )
+- Custom utilities, `is_js_class ( )`
 
 ### Changed
-- Refactored and refined get_files ( ) and generator
+- Refactored and refined:
+  - `get_files ( )`
+  - `generator ( )`
 
 ## [0.3.1] - 2023-04-20
 ### Changed
-- Refactored and refined get_files ( ) and generator
-- Updated README.md
+- Refactored and refined:
+  - `get_files ( )`
+  - `generator ( )`
+- Updated `README.md`
 
 ## [0.3.0] - 2023-04-20
 ### Added
-- System utilities, get_files ( ), list_to_string ( ), parse_commands
+- System utilities:
+  - `get_files ( )`
+  - `list_to_string ( )`
+  - `parse_commands ( )`
 - Expanded test cases
 
 ### Changed
-- Refactored clean_properties ( ), get_commands ( ), and repeat_character
+- Refactored:
+  - `clean_properties ( )`
+  - `get_commands ( )`
+  - `repeat_character ( )`
 
 ## [0.2.0] - 2023-04-17
 ### Added
-- Custom utilities, clean_properties ( ) and is_extension ( )
-- System utilities, get_eof ( ), create_2d_list ( ), entry_padding ( ), and repeat_character ( )
+- Custom utilities:
+  - `clean_properties ( )`
+  - `is_extension ( )`
+- System utilities:
+  - `get_eof ( )`
+  - `create_2d_list ( )`
+  - `entry_padding ( )`
+  - `repeat_character ( )`
 - Expanded test suite
 
 ### Changed
-- Refactored parse_commands ( ), for get_commands ( )
-- Refactored is_directory ( ) and is_file ( ) validation scripts
+- Refactored:
+  - `parse_commands ( )`
+  - `get_commands ( )`
+- Refactored validation scripts, and:
+  - `is_directory ( )`
+  - `is_file ( )`
 
 ## [0.1.0] - 2023-04-11
 ### Added
@@ -53,17 +91,19 @@ All notable changes to this project will be documented in this file.
 - License
 
 ### Changed
-- Updated README.md
+- Updated `README.md`
 
 ## [0.0.0] - 2023-04-02
 ### Added
 - Directory structure
-- CHANGELOG.md
-- README.md
+- `CHANGELOG.md`
+- `README.md`
 
 ---
 
-[0.5.2]: 2023-04-26 [CURRENT REVISION] Implemented configuration file and parsing methods
+[0.5.5]: 2023-04-27 [CURRENT REVISION] Finalized generator processes and unit-tests
+
+[0.5.2]: 2023-04-26 [2256899](https://github.com/Justin-Byrne/ClassGenerator/commit/2256899) Implemented configuration file and parsing methods
 
 [0.4.2]: 2023-04-23 [4a78b19](https://github.com/Justin-Byrne/ClassGenerator/commit/4a78b19) Implemented various functions to parse JavaScript document data
 

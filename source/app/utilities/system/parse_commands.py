@@ -1,8 +1,10 @@
 import re
 
-from .list.list_to_string 	  import list_to_string
+from os.path 				import dirname
 
-from .get_command_type 		  import get_command_type
+from .list.list_to_string 	import list_to_string
+
+from .get_command_type 		import get_command_type
 
 def parse_commands ( commands ):
 
@@ -49,9 +51,11 @@ def parse_commands ( commands ):
 					'skin_param': r'SKIN PARAM'
 				}
 
-				lines   = open ( './config/config.txt', 'r' ).readlines ( )
+				parent_path  = dirname ( dirname ( __file__ ) ).split ( '/app/', 1 ) [ 0 ]
 
-				capture = False
+				lines        = open ( f"{parent_path}/app/config/config.txt", 'r' ).readlines ( )
+
+				capture      = False
 
 
 				for line in lines:
@@ -98,7 +102,7 @@ def parse_commands ( commands ):
 
 		else:
 
-			if re.search ( r'(\/\w+){1,}', command ):
+			if re.search ( r'(\/\w+){1,}', command ) and i <= 2:
 
 				arguments [ 'destination' ] = command
 

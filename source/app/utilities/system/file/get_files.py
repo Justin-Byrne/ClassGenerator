@@ -24,7 +24,7 @@ def is_js_class ( file ):
 
 			if re.search ( r'class\s*\w+', line ) and metrics [ 'start' ] == None:
 
-				metrics [ 'start' ] = i
+				metrics [ 'start'  ] = i
 
 				metrics [ 'column' ] = line.find ( 'c' )
 

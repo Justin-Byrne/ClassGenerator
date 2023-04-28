@@ -4,7 +4,7 @@
 # three
 
 #### 	SKIN PARAM
-left to right direction
-skinparam DefaultFontSize 16
-skinparam DefaultFontName Courier 10 Pitch
-skinparam ClassAttributeIconSize 0
+# left to right direction
+# skinparam DefaultFontSize 16
+# skinparam DefaultFontName Courier 10 Pitch
+# skinparam ClassAttributeIconSize 0
