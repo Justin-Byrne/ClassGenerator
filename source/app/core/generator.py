@@ -1,8 +1,9 @@
 import os
 import re
 
-from utilities.util 					import Util
-from utilities.system.file.get_files 	import get_files
+from utilities.util 						import Util
+from utilities.system.file.get_files 		import get_files
+from utilities.custom.debug.view_arguments	import view_arguments
 
 class Generator:
 
@@ -26,6 +27,8 @@ class Generator:
 		}
 
 		#### 	INITIALIZE 	################################
+
+		# view_arguments ( arguments )
 
 		self.init ( )
 

@@ -1,12 +1,12 @@
 import re
 
 from os.path 				import dirname
-
 from .list.list_to_string 	import list_to_string
-
 from .get_command_type 		import get_command_type
 
 def parse_commands ( commands ):
+
+	#### 	GLOBALS 	####################################
 
 	arguments = {
 		'flag':        None,
@@ -14,48 +14,112 @@ def parse_commands ( commands ):
 		'destination': None
 	}
 
-	regex_flags = {
-		'omit_files': r'-o\s*([^\s]+)|--omit\s*([^\s]+)',
-		'skin_param': r'-s\s*([^\s]+)|--skin\s*([^\s]+)'
+	regexes = {
+		'locations':  r'(\/\w+[^\s*]+)',
+		'omit_files': r'\s*-o\s*|\s*--omit\s*',
+		'skin_param': r'\s*-s\s*|\s*--skin\s*',
+		'link_files': r'\s*-l\s*|\s*--link\s*',
+		'make_image': r'\s*-m\s*|\s*--make\s*'
 	}
+
+	image_types = [
+		'png',
+		'svg',
+		'eps',
+		'eps:text',
+		'pdf',
+		'vdx',
+		'xmi',
+		'scxml',
+		'html',
+		'txt',
+		'utxt',
+		'latex',
+		'latex:nopreamble',
+		'braille'
+	]
 
 	#### 	FUNCTIONS 	####################################
 
-	def get_special_flags ( ):
+	def check_command_line ( ):
 
-		command_string = list_to_string ( commands )
+		for i in range ( 1, len ( commands ) ):
 
-
-		for flag in regex_flags:
-
-			list = [ ]
-
-			if re.search ( regex_flags [ flag ], command_string ):
-
-				flag_commands = re.findall ( regex_flags [ flag ], command_string ) [ 0 ]
-
-				flag_commands = [    entry for entry in flag_commands if entry != ''    ]
+			command = commands [ i ]
 
 
-				for command in flag_commands:
+			for regex in regexes:
 
-					list.append ( command.replace ( '/', ' ' ) )
+				if ( re.search ( regexes [ regex ], command ) ):
+
+					match regex:
+
+						case 'locations':
+
+							if arguments [ 'source' ] == None:
+
+								arguments [ 'source' ] = command
+
+							elif arguments [ 'destination' ] == None:
+
+								arguments [ 'destination' ] = command
+
+						case 'omit_files':
+
+							if regex != arguments.keys ( ):
+
+								value = commands [ i + 1 ].split ( '|' )
+
+								arguments.update ( { regex: value } )
+
+						case 'skin_param':
+
+							if regex != arguments.keys ( ):
+
+								value = commands [ i + 1 ].split ( '|' )
+
+								value = [ v.replace ( '+', ' ' ) for v in value ]
+
+								arguments.update ( { regex: value } )
+
+						case 'link_files':
+
+							if regex != arguments.keys ( ):
+
+								arguments.update ( { regex: True } )
+
+						case 'make_image':
+
+							if regex != arguments.keys ( ):
+
+								value = commands [ i + 1 ].split ( '|' )
 
 
-				arguments.update ( { flag: list [ 0 ].split ( '|' ) } )
+								if set ( value ).issubset ( image_types ):
 
-			else:
+									arguments.update ( { regex: value } )
 
-				config_regex = {
-					'omit_files': r'FILE OMISSIONS',
-					'skin_param': r'SKIN PARAM'
-				}
+								else:
 
-				parent_path  = dirname ( dirname ( __file__ ) ).split ( '/app/', 1 ) [ 0 ]
+									print ( 'parse_commands.py received an inaccurate image-type !' )
 
-				lines        = open ( f"{parent_path}/app/config/config.txt", 'r' ).readlines ( )
+	def check_config_file  ( ):
 
-				capture      = False
+		config_regex = {
+			'omit_files': r'FILE OMISSIONS',
+			'skin_param': r'SKIN PARAM',
+			'make_image': r'IMAGE OUTPUT'
+		}
+
+		for regex in config_regex:
+
+			if regex != arguments.keys ( ):
+
+				list    = [ ]
+
+				lines   = open ( './config/config.txt', 'r' ).readlines ( )
+
+				capture = False
 
 
 				for line in lines:
@@ -65,7 +129,7 @@ def parse_commands ( commands ):
 						break
 
 
-					if re.search ( config_regex [ flag ], line ):
+					if re.search ( config_regex [ regex ], line ):
 
 						capture = True
 
@@ -81,37 +145,28 @@ def parse_commands ( commands ):
 
 					if len ( list ) > 0:
 
-						arguments.update ( { flag: list } )
+						arguments.update ( { regex: list } )
 
-	#### 	LOGIC	########################################
+	def check_plant_uml    ( ):
 
-	get_special_flags ( )
+		if 'make_image' in arguments.keys ( ):
+
+			data = open ( './config/config.txt', 'r' ).read ( )
+
+			path = re.findall ( r'PLANTUML PATH\s*path=([^\s]+)', data )
 
 
-	for i in range ( 1, len ( commands ) ):
+			if path:
 
-		command = commands [ i ]
+				arguments.update ( { 'plant_path': path } )
 
-		# SET: INPUT & OUTPUT
-		if arguments [ 'source' ] is None:
+	#### 	LOGIC 		####################################
 
-			if get_command_type ( command ) == 'file' or \
-			   get_command_type ( command ) == 'directory':
+	check_command_line ( )
 
-			   arguments [ 'source' ] = command
+	check_config_file  ( )
 
-		else:
-
-			if re.search ( r'(\/\w+){1,}', command ) and i <= 2:
-
-				arguments [ 'destination' ] = command
-
-		# SET: FLAG
-		if get_command_type ( command ) == 'flag':
-
-			if arguments [ 'flag' ] is None:
-
-				arguments [ 'flag' ] = command
+	check_plant_uml    ( )
 
 
 	return arguments

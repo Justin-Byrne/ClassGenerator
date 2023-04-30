@@ -2,6 +2,7 @@
 from .system.validation.is_directory 	import is_directory
 from .system.validation.is_file      	import is_file
 from .system.validation.is_flag      	import is_flag
+from .system.validation.is_program 		import is_program
 from .system.get_command_type        	import get_command_type
 from .system.get_commands 			 	import get_commands
 from .system.file.get_eof 			 	import get_eof
@@ -29,6 +30,8 @@ class Util:
 	def is_file 	 	 ( path,   type = None )  				: return is_file          ( path, type )
 
 	def is_flag      	 ( string, flag = '-'  )  				: return is_flag 	      ( string, flag )
+
+	def is_program 		 ( program )							: return is_program 	  ( program )
 
 	# COMMAND
 

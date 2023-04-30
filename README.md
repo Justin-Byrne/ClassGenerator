@@ -5,9 +5,11 @@
 ![stars](https://img.shields.io/github/stars/Justin-Byrne/ClassGenerator)
 ![license](https://img.shields.io/github/license/Justin-Byrne/ClassGenerator)
 <img src="https://img.shields.io/badge/Python-3.11.2-blue" />
+<img src="https://img.shields.io/badge/PlantUML-1.2.023.4-purple" />
  
 PlantUML class generator for JavaScript
 
+- [Requirements](#requirements)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Configuration](#configuration)
@@ -15,6 +17,12 @@ PlantUML class generator for JavaScript
 - [Support](#support)
 - [Structure](#structure)
 - [Copyright](#copyright)
+
+## Requirements
+
+> PlantUML is an optional requirement, if you want to render UML images; PNG, SVG, etc...
+
+[Download](https://plantuml.com/download)
 
 ## Installation
 
@@ -52,11 +60,30 @@ skinparam DefaultFontSize 16
 skinparam DefaultFontName Courier 10 Pitch
 skinparam ClassAttributeIconSize 0
 
+#### 	IMAGE OUTPUT
+png
+svg
+eps
+eps:text
+pdf
+vdx
+xmi
+scxml
+html
+txt
+utxt
+latex
+latex:nopreamble
+braille
+
+####	PLANTUML PATH
+path=~/Programs/PlantUML
+
 ```
 
 ## Examples
 
-> `python3 BuildClass.py ~/Programs/JavaScript/Classes/class.js`
+> `python3 BuildClass.py ~/Programs/JavaScript/Classes/class.js` -m "png"
 
 <table>
 <tr>
@@ -116,8 +143,10 @@ prop3
 @enduml
 ```
 </td>
-</tr>
+<td>
 <img src="https://github.com/Justin-Byrne/ClassGenerator/blob/main/images/class.png">
+</td>
+</tr>
 </td>
 </tr>
 </table>
@@ -148,6 +177,8 @@ Please [open an issue](https://github.com/Justin-Byrne/ClassGenerator/issues/new
             ├── custom
             │   ├── cleanup
             │   │   └── clean_properties.py
+            │   ├── debug
+            │   │   └── view_arguments.py
             │   └── validation
             │       ├── is_extension.py
             │       └── is_js_class.py
@@ -167,7 +198,8 @@ Please [open an issue](https://github.com/Justin-Byrne/ClassGenerator/issues/new
             │   └── validation
             │       ├── is_directory.py
             │       ├── is_file.py
-            │       └── is_flag.py
+            │       ├── is_flag.py
+            │       └── is_program.py
             └── util.py
 ```
 

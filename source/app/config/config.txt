@@ -8,3 +8,22 @@
 # skinparam DefaultFontSize 16
 # skinparam DefaultFontName Courier 10 Pitch
 # skinparam ClassAttributeIconSize 0
+
+#### 	IMAGE OUTPUT
+# png
+# svg
+# eps
+# eps:text
+# pdf
+# vdx
+# xmi
+# scxml
+# html
+# txt
+# utxt
+# latex
+# latex:nopreamble
+# braille
+
+####	PLANTUML PATH
+# path=~/Programs/PlantUML

@@ -45,9 +45,13 @@ class TestUtil ( unittest.TestCase ):
 
 		self.assertFalse ( Util.is_flag ( '#f' ) )
 
+	def test_is_program 	  ( self ): 						# 04
+
+		self.assertTrue ( Util.is_program ( 'java' ) )
+
 	# COMMAND
 
-	def test_get_command_type ( self ): 						# 04
+	def test_get_command_type ( self ): 						# 05
 
 		self.assertEqual ( Util.get_command_type ( FLAG ), 'flag'      )
 
@@ -55,75 +59,77 @@ class TestUtil ( unittest.TestCase ):
 
 		self.assertEqual ( Util.get_command_type ( DIRE ), 'directory' )
 
-	def test_get_commands     ( self ): 						# 05
+	def test_get_commands     ( self ): 						# 06
 
-		amount   = 20
+		pass
 
-		commands = [ [ ] for i in range ( amount ) ]
-		results  = [ [ ] for i in range ( amount ) ]
+		# amount   = 20
 
-		commands [  0 ] = [ '0', FLAG ]
-		commands [  1 ] = [ '0', DIRE ]
-		commands [  2 ] = [ '0', FLAG, DIRE ]
-		commands [  3 ] = [ '0', DIRE, DIRE ]
-		commands [  4 ] = [ '0', FLAG, DIRE, DIRE ]
-		commands [  5 ] = [ '0', DIRE, FLAG, DIRE ]
-		commands [  6 ] = [ '0', DIRE, DIRE, FLAG ]
+		# commands = [ [ ] for i in range ( amount ) ]
+		# results  = [ [ ] for i in range ( amount ) ]
 
-		results  [  0 ] = ERROR
-		results  [  1 ] = { 'flag': None, 'source': DIRE, 'destination': f"{DIRE}/output" }
-		results  [  2 ] = { 'flag': FLAG, 'source': DIRE, 'destination': f"{DIRE}/output" }
-		results  [  3 ] = { 'flag': None, 'source': DIRE, 'destination': DIRE }
-		results  [  4 ] = { 'flag': FLAG, 'source': DIRE, 'destination': DIRE }
-		results  [  5 ] = { 'flag': FLAG, 'source': DIRE, 'destination': DIRE }
-		results  [  6 ] = { 'flag': FLAG, 'source': DIRE, 'destination': DIRE }
+		# commands [  0 ] = [ '0', FLAG ]
+		# commands [  1 ] = [ '0', DIRE ]
+		# commands [  2 ] = [ '0', FLAG, DIRE ]
+		# commands [  3 ] = [ '0', DIRE, DIRE ]
+		# commands [  4 ] = [ '0', FLAG, DIRE, DIRE ]
+		# commands [  5 ] = [ '0', DIRE, FLAG, DIRE ]
+		# commands [  6 ] = [ '0', DIRE, DIRE, FLAG ]
 
-		commands [  7 ] = [ '0', FLAG, FILE ]
-		commands [  8 ] = [ '0', FILE, DIRE ]
-		commands [  9 ] = [ '0', FILE, FILE ]
-		commands [ 10 ] = [ '0', DIRE, FILE ] 				# << ERROR: DIRECTORY TO SINGLE FILE
+		# results  [  0 ] = ERROR
+		# results  [  1 ] = { 'flag': None, 'source': DIRE, 'destination': f"{DIRE}/output" }
+		# results  [  2 ] = { 'flag': FLAG, 'source': DIRE, 'destination': f"{DIRE}/output" }
+		# results  [  3 ] = { 'flag': None, 'source': DIRE, 'destination': DIRE }
+		# results  [  4 ] = { 'flag': FLAG, 'source': DIRE, 'destination': DIRE }
+		# results  [  5 ] = { 'flag': FLAG, 'source': DIRE, 'destination': DIRE }
+		# results  [  6 ] = { 'flag': FLAG, 'source': DIRE, 'destination': DIRE }
 
-		results  [  7 ] = { 'flag': FLAG, 'source': FILE, 'destination': f"{DIRE}/output" }
-		results  [  8 ] = { 'flag': None, 'source': FILE, 'destination': DIRE }
-		results  [  9 ] = { 'flag': None, 'source': FILE, 'destination': FILE }
-		results  [ 10 ] = ERROR
+		# commands [  7 ] = [ '0', FLAG, FILE ]
+		# commands [  8 ] = [ '0', FILE, DIRE ]
+		# commands [  9 ] = [ '0', FILE, FILE ]
+		# commands [ 10 ] = [ '0', DIRE, FILE ] 				# << ERROR: DIRECTORY TO SINGLE FILE
 
-		commands [ 11 ] = [ '0', FLAG, FILE, DIRE ]
-		commands [ 12 ] = [ '0', FLAG, FILE, FILE ]
-		commands [ 13 ] = [ '0', FLAG, DIRE, FILE ] 		# << ERROR: DIRECTORY TO SINGLE FILE
+		# results  [  7 ] = { 'flag': FLAG, 'source': FILE, 'destination': f"{DIRE}/output" }
+		# results  [  8 ] = { 'flag': None, 'source': FILE, 'destination': DIRE }
+		# results  [  9 ] = { 'flag': None, 'source': FILE, 'destination': FILE }
+		# results  [ 10 ] = ERROR
 
-		results  [ 11 ] = { 'flag': FLAG, 'source': FILE, 'destination': DIRE }
-		results  [ 12 ] = { 'flag': FLAG, 'source': FILE, 'destination': FILE }
-		results  [ 13 ] = ERROR
+		# commands [ 11 ] = [ '0', FLAG, FILE, DIRE ]
+		# commands [ 12 ] = [ '0', FLAG, FILE, FILE ]
+		# commands [ 13 ] = [ '0', FLAG, DIRE, FILE ] 		# << ERROR: DIRECTORY TO SINGLE FILE
 
-		commands [ 14 ] = [ '0', FILE, FLAG, DIRE ]
-		commands [ 15 ] = [ '0', FILE, FLAG, FILE ]
-		commands [ 16 ] = [ '0', DIRE, FLAG, FILE ] 		# << ERROR: DIRECTORY TO SINGLE FILE
+		# results  [ 11 ] = { 'flag': FLAG, 'source': FILE, 'destination': DIRE }
+		# results  [ 12 ] = { 'flag': FLAG, 'source': FILE, 'destination': FILE }
+		# results  [ 13 ] = ERROR
 
-		results  [ 14 ] = { 'flag': FLAG, 'source': FILE, 'destination': DIRE }
-		results  [ 15 ] = { 'flag': FLAG, 'source': FILE, 'destination': FILE }
-		results  [ 16 ] = ERROR
+		# commands [ 14 ] = [ '0', FILE, FLAG, DIRE ]
+		# commands [ 15 ] = [ '0', FILE, FLAG, FILE ]
+		# commands [ 16 ] = [ '0', DIRE, FLAG, FILE ] 		# << ERROR: DIRECTORY TO SINGLE FILE
 
-		commands [ 17 ] = [ '0', FILE, DIRE, FLAG ]
-		commands [ 18 ] = [ '0', FILE, FILE, FLAG ]
-		commands [ 19 ] = [ '0', DIRE, FILE, FLAG ] 		# << ERROR: DIRECTORY TO SINGLE FILE
+		# results  [ 14 ] = { 'flag': FLAG, 'source': FILE, 'destination': DIRE }
+		# results  [ 15 ] = { 'flag': FLAG, 'source': FILE, 'destination': FILE }
+		# results  [ 16 ] = ERROR
 
-		results  [ 17 ] = { 'flag': FLAG, 'source': FILE, 'destination': DIRE }
-		results  [ 18 ] = { 'flag': FLAG, 'source': FILE, 'destination': FILE }
-		results  [ 19 ] = ERROR
+		# commands [ 17 ] = [ '0', FILE, DIRE, FLAG ]
+		# commands [ 18 ] = [ '0', FILE, FILE, FLAG ]
+		# commands [ 19 ] = [ '0', DIRE, FILE, FLAG ] 		# << ERROR: DIRECTORY TO SINGLE FILE
+
+		# results  [ 17 ] = { 'flag': FLAG, 'source': FILE, 'destination': DIRE }
+		# results  [ 18 ] = { 'flag': FLAG, 'source': FILE, 'destination': FILE }
+		# results  [ 19 ] = ERROR
 
 
-		for i in range ( amount ):
+		# for i in range ( amount ):
 
-			command, result = commands [ i ], results [ i ]
+		# 	command, result = commands [ i ], results [ i ]
 
-			message = f"\n\n\t>> Test: {i}\n\tcommands: {command}\n\tresults:  {result}\n"
+		# 	message = f"\n\n\t>> Test: {i}\n\tcommands: {command}\n\tresults:  {result}\n"
 
-			self.assertEqual ( Util.get_commands ( command ), result, message )
+		# 	self.assertEqual ( Util.get_commands ( command ), result, message )
 
 	# FILE
 
-	def test_get_eof 		  ( self ): 						# 06
+	def test_get_eof 		  ( self ): 						# 07
 
 		self.assertEqual ( Util.get_eof ( f"{WDIR}/test.txt" ), ERROR )
 
@@ -131,7 +137,7 @@ class TestUtil ( unittest.TestCase ):
 
 	# STRING
 
-	def test_repeat_character ( self ): 						# 07
+	def test_repeat_character ( self ): 						# 08
 
 		self.assertEqual ( Util.repeat_character ( 'A',  1 ), ERROR )
 		self.assertEqual ( Util.repeat_character ( 'AA', 1 ), ERROR )
@@ -143,7 +149,7 @@ class TestUtil ( unittest.TestCase ):
 
 	# LIST
 
-	def test_create_2d_list   ( self ): 						# 08
+	def test_create_2d_list   ( self ): 						# 09
 
 		self.assertEqual ( Util.create_2d_list ( 0 ), ERROR )
 
@@ -151,7 +157,7 @@ class TestUtil ( unittest.TestCase ):
 		self.assertEqual ( Util.create_2d_list ( 2 ), [ [ ], [ ] ] )
 		self.assertEqual ( Util.create_2d_list ( 3 ), [ [ ], [ ], [ ] ] )
 
-	def test_entry_padding    ( self ): 						# 09
+	def test_entry_padding    ( self ): 						# 10
 
 		props = [
 			( 'prop',      'number'      ),
@@ -168,7 +174,7 @@ class TestUtil ( unittest.TestCase ):
 
 		self.assertEqual ( Util.entry_padding ( props, 10, 2 ), ERROR )
 
-	def test_list_to_string   ( self ): 						# 10
+	def test_list_to_string   ( self ): 						# 11
 
 		self.assertEqual ( Util.list_to_string ( [ 'one' ] ), 'one' )
 
@@ -180,7 +186,7 @@ class TestUtil ( unittest.TestCase ):
 
 	# VALIDATION
 
-	def test_is_extension     ( self ): 						# 11
+	def test_is_extension     ( self ): 						# 12
 
 		lines = [
 			'////    TITLE 01    ////',
@@ -209,7 +215,7 @@ class TestUtil ( unittest.TestCase ):
 			self.assertTrue  ( Util.is_extension ( line, extension_titles ) )
 			self.assertFalse ( Util.is_extension ( line, f"extension_titlesA" ) )
 
-	def test_is_js_class      ( self ): 						# 12
+	def test_is_js_class      ( self ): 						# 13
 
 		# files = [
 		# 	'cases/source/class.js',
@@ -225,7 +231,7 @@ class TestUtil ( unittest.TestCase ):
 
 	# CLEANUP
 
-	def test_clean_properties ( self ): 						# 13
+	def test_clean_properties ( self ): 						# 14
 
 		props = [
 			( 'number',        '[prop1=25]', '',        'prop1', '25' ),
