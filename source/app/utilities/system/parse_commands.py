@@ -1,8 +1,10 @@
 import re
 
-from os.path 				import dirname
-from .list.list_to_string 	import list_to_string
-from .get_command_type 		import get_command_type
+from os.path 					import dirname
+
+from .list.list_to_string 		import list_to_string
+from .get_command_type 			import get_command_type
+from .validation.is_program 	import is_program
 
 def parse_commands ( commands ):
 
@@ -151,12 +153,17 @@ def parse_commands ( commands ):
 
 		if 'make_image' in arguments.keys ( ):
 
-			data = open ( './config/config.txt', 'r' ).read ( )
+			if is_program ( 'java' ):
 
-			path = re.findall ( r'PLANTUML PATH\s*path=([^\s]+)', data )
+				data = open ( './config/config.txt', 'r' ).read ( )
+
+				path = re.search ( r'PLANTUML PATH\s*path=([^\s]+)', data ).group ( 1 )
 
 
-			if path:
+				if re.search ( r'plantuml\.jar', path ) == None:
+
+					path = f"{path.rstrip ( '/' )}/plantuml.jar"
+
 
 				arguments.update ( { 'plant_path': path } )
 

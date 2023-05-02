@@ -1,3 +1,10 @@
+/**
+ * @class           {Object}      Two                           Description
+ * @property        {number}      prop0                         Description
+ * @property        {string}      prop1                         Description
+ * @property        {One}         prop2                         Description
+ * @property        {Three}       prop3                         Description
+ */
 class Two
 {
     _prop0 = 0;

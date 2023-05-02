@@ -1,9 +1,12 @@
 import os
 import re
+import subprocess
 
 from utilities.util 						import Util
 from utilities.system.file.get_files 		import get_files
 from utilities.custom.debug.view_arguments	import view_arguments
+
+from .linker 								import Linker
 
 class Generator:
 
@@ -95,6 +98,8 @@ class Generator:
 		self.compose_footer  ( )
 
 		self.save_output     ( )
+
+		self.compose_image   ( )
 
 	#### 	GETTERS 	########################################
 
@@ -412,4 +417,29 @@ class Generator:
 
 			writer.write ( self.diagram [ 'master' ] )
 
-			print ( ">>  [ output ] \n", f"{self.output_path}\n" )
+			print ( ">>  [ output ] \n", f"{self.output_path}" )
+
+	def compose_image   ( self ):
+
+		if 'plant_path' in self.arguments.keys ( ):
+
+			for image_type in self.arguments [ 'make_image' ]:
+
+				output_path = f"{os.path.dirname ( self.output_path )}/images"
+
+				command     = f"java -jar {self.arguments [ 'plant_path' ]} \"{self.output_path}\" -o \"{output_path}\" -{image_type}"
+
+				filename    = os.path.basename ( self.output_path ).replace ( 'txt', image_type )
+
+
+				if Util.is_directory ( output_path ) is False:
+
+					os.makedirs ( output_path )
+
+
+				subprocess.run ( command, shell=True )
+
+
+				print ( f" {output_path}/{filename}\n" )
+
+		return True

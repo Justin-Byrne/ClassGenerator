@@ -6,6 +6,7 @@
 ![license](https://img.shields.io/github/license/Justin-Byrne/ClassGenerator)
 <img src="https://img.shields.io/badge/Python-3.11.2-blue" />
 <img src="https://img.shields.io/badge/PlantUML-1.2.023.4-purple" />
+<img src="https://img.shields.io/badge/Graphviz-8.0.5-green" />
  
 PlantUML class generator for JavaScript
 
@@ -20,9 +21,10 @@ PlantUML class generator for JavaScript
 
 ## Requirements
 
-> PlantUML is an optional requirement, if you want to render UML images; PNG, SVG, etc...
-
-[Download](https://plantuml.com/download)
+| Program | Function | Optional | Download |
+| :---: | :--- | :---: | :---: |
+| PlantUML | Render UML images; PNG, SVG, etc... | :white_check_mark: | [:floppy_disk:](https://plantuml.com/download) |
+| Graphviz | Render linked UML images. | :white_check_mark: | [:floppy_disk:](https://graphviz.org/download/) |
 
 ## Installation
 
@@ -83,7 +85,7 @@ path=~/Programs/PlantUML
 
 ## Examples
 
-> `python3 BuildClass.py ~/Programs/JavaScript/Classes/class.js` -m "png"
+> `python3 BuildClass.py ~/Programs/JavaScript/Classes/class.js -m "png"`
 
 <table>
 <tr>
@@ -91,7 +93,7 @@ path=~/Programs/PlantUML
 <th> PlantUml ( Text ) </th>
 <th> PlantUml ( PNG ) </th>
 </tr>
-<tr>
+<tr valign="top">
 <td>
 
 ```js
@@ -145,6 +147,118 @@ prop3
 </td>
 <td>
 <img src="https://github.com/Justin-Byrne/ClassGenerator/blob/main/images/class.png">
+</td>
+</tr>
+</td>
+</tr>
+</table>
+
+> `python3 BuildClass.py ~/Programs/JavaScript/Classes/class.js -l -m "png"`
+
+<table>
+<tr>
+<th> JavaScript </th>
+<th> PlantUml ( Text ) </th>
+<th> PlantUml ( PNG ) </th>
+</tr>
+<tr valign="top">
+<td>
+
+```js
+/**
+ * @class     {Object}  One
+ * @property  {number}  prop0
+ * @property  {string}  prop1
+ * @property  {Two}     prop2
+ * @property  {Three}   prop3
+ *
+ */
+class One
+{
+    _prop0 = 0;
+    _prop1 = 'string';
+    _prop2 = new Two;
+    _prop3 = new Three;
+
+    constructor ( ) { }
+
+    set prop0 ( value ) { }
+    get prop0 ( ) { }
+
+    set prop1 ( value ) { }
+    get prop1 ( ) { }
+
+    set prop2 ( value ) { }
+    get prop2 ( ) { }
+
+    set prop3 ( value ) { }
+    get prop3 ( ) { }
+}
+
+```
+</td>
+<td>
+
+```bash
+@startuml
+
+class One {
+prop0   <co..ay>{number}</co.or>
+prop1   <co..ay>{string}</co.or>
+prop2   {Two}
+prop3   {Three}
+__ Setter __
+prop0
+prop1
+prop2
+prop3
+__ Getter __
+prop0
+prop1
+prop2
+prop3
+}
+One *-- Three
+One *-- Two
+
+class Two {
+prop0   <co..ay>{number}</co.or>
+prop1   <co..ay>{string}</co.or>
+prop2   {One}
+prop3   {Three}
+__ Setter __
+prop0
+prop1
+prop2
+prop3
+__ Getter __
+prop0
+prop1
+prop2
+prop3
+}
+
+class Three {
+prop0   <co..ay>{number}</co.or>
+prop1   <co..ay>{string}</co.or>
+prop2   {One}
+prop3   {Two}
+__ Setter __
+prop0
+prop1
+prop2
+prop3
+__ Getter __
+prop0
+prop1
+prop2
+prop3
+}
+@enduml
+```
+</td>
+<td>
+<img src="https://github.com/Justin-Byrne/ClassGenerator/blob/main/images/linked.png">
 </td>
 </tr>
 </td>
@@ -208,3 +322,5 @@ Please [open an issue](https://github.com/Justin-Byrne/ClassGenerator/issues/new
 ![Byrne-Systems](https://github.com/Justin-Byrne/ClassGenerator/blob/main/images/cube_sm.png)
 
 == Byrne-Systems © 2023 - All rights reserved. ==
+
+:lotus_position:

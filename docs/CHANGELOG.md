@@ -1,6 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.7.6] - 2023-05-02
+### Added
+- Fully implemented class linker; to link referenced classes
+  - `linker ( )`
+
+### Fixed
+- Discrepancies with README.md
+
+### Changed
+- Refactored and refined:
+  - `generator ( )`
+  - `parse_commands ( )`
+
 ## [0.6.5] - 2023-04-29
 ### Added
 - Validation
@@ -114,25 +127,19 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-[0.6.5]: 2023-04-29 [CURRENT REVISION] Expanded config, validation, and debugging
-
-[0.5.5]: 2023-04-27 [ae2d7e9](https://github.com/Justin-Byrne/ClassGenerator/commit/ae2d7e9) Finalized generator processes and unit-tests
-
-[0.5.2]: 2023-04-26 [2256899](https://github.com/Justin-Byrne/ClassGenerator/commit/2256899) Implemented configuration file and parsing methods
-
-[0.4.2]: 2023-04-23 [4a78b19](https://github.com/Justin-Byrne/ClassGenerator/commit/4a78b19) Implemented various functions to parse JavaScript document data
-
-[0.3.2]: 2023-04-21 [28b0d8e](https://github.com/Justin-Byrne/ClassGenerator/commit/28b0d8e) Implemented further source validation
-
-[0.3.1]: 2023-04-20 [3251d7a](https://github.com/Justin-Byrne/ClassGenerator/commit/3251d7a) Minor refactoring
-
-[0.3.0]: 2023-04-20 [4dbb4d9](https://github.com/Justin-Byrne/ClassGenerator/commit/4dbb4d9) System utility additions, and general revisions
-
-[0.2.0]: 2023-04-17 [7968397](https://github.com/Justin-Byrne/ClassGenerator/commit/7968397) Further utility implementation, and general revision(s)
-
-[0.1.0]: 2023-04-11 [f9b479d](https://github.com/Justin-Byrne/ClassGenerator/commit/f9b479d) Core application files added
-
-[0.0.0]: 2023-04-02 [5d504a3](https://github.com/Justin-Byrne/ClassGenerator/commit/5d504a3) initial upload
+| Version | Date       | Commit                                                                   | Comments 														  |
+| :-----: | :--------: | :----------------------------------------------------------------------: | :---------------------------------------------------------------- |
+| 0.7.6   | 2023-05-02 | Current                                                                  | Fully implemented class linker
+| 0.6.5   | 2023-04-29 | [ed8937b](https://github.com/Justin-Byrne/ClassGenerator/commit/ed8937b) | Expanded config, validation, and debugging
+| 0.5.5   | 2023-04-27 | [ae2d7e9](https://github.com/Justin-Byrne/ClassGenerator/commit/ae2d7e9) | Finalized generator processes and unit-tests
+| 0.5.2   | 2023-04-26 | [2256899](https://github.com/Justin-Byrne/ClassGenerator/commit/2256899) | Implemented configuration file and parsing methods
+| 0.4.2   | 2023-04-23 | [4a78b19](https://github.com/Justin-Byrne/ClassGenerator/commit/4a78b19) | Implemented various functions to parse JavaScript document data
+| 0.3.2   | 2023-04-21 | [28b0d8e](https://github.com/Justin-Byrne/ClassGenerator/commit/28b0d8e) | Implemented further source validation
+| 0.3.1   | 2023-04-20 | [3251d7a](https://github.com/Justin-Byrne/ClassGenerator/commit/3251d7a) | Minor refactoring
+| 0.3.0   | 2023-04-20 | [4dbb4d9](https://github.com/Justin-Byrne/ClassGenerator/commit/4dbb4d9) | System utility additions, and general revisions
+| 0.2.0   | 2023-04-17 | [7968397](https://github.com/Justin-Byrne/ClassGenerator/commit/7968397) | Further utility implementation, and general revision(s)
+| 0.1.0   | 2023-04-11 | [f9b479d](https://github.com/Justin-Byrne/ClassGenerator/commit/f9b479d) | Core application files added
+| 0.0.0   | 2023-04-02 | [5d504a3](https://github.com/Justin-Byrne/ClassGenerator/commit/5d504a3) | initial upload
 
 ---
 
