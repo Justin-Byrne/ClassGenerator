@@ -16,6 +16,6 @@ def main ( commands ):
 		if Generator ( arguments ) and arguments [ 'link_files' ]:
 
 			Linker ( arguments )
-			
+
 
 main ( sys.argv )

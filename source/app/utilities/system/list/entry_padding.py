@@ -26,14 +26,14 @@ def entry_padding ( tuple_list, padding = 3, entry = 0 ):
 
 	if padding < 1:
 
-		print ( 'entry_padding.py requires a padding param value of at least 1 !')
+		print ( ' >> [ERROR] entry_padding.py\n\t~ Requires a padding param value of at least 1 !' )
 
 		return ERROR
 
 
 	if entry > get_max_tuple_length ( tuple_list ) or entry < 0:
 
-		print ( 'entry_padding.py entry param value is not uniformly accessible through tuple_list param value !')
+		print ( ' >> [ERROR] entry_padding.py\n\t~ Entry param value is not uniformly accessible through tuple_list param value !' )
 
 		return ERROR
 

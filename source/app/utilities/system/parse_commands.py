@@ -12,13 +12,14 @@ def parse_commands ( commands ):
 	#### 	GLOBALS 	####################################
 
 	arguments = {
-		'flag':        None,
 		'source':      None,
 		'destination': None,
-		'link_files':  False
+		'link_files':  False,
+		'help_menu':   False
 	}
 
 	regexes = {
+		'help_menu':  r'\s*-h\s*|\s*--help\s*',
 		'locations':  r'(\/\w+[^\s*]+)',
 		'omit_files': r'\s*-o\s*|\s*--omit\s*',
 		'skin_param': r'\s*-s\s*|\s*--skin\s*',
@@ -57,6 +58,12 @@ def parse_commands ( commands ):
 				if ( re.search ( regexes [ regex ], command ) ):
 
 					match regex:
+
+						case 'help_menu':
+
+							arguments [ 'help_menu' ] = True
+
+							break
 
 						case 'locations':
 
@@ -161,21 +168,30 @@ def parse_commands ( commands ):
 
 				data    = open ( './config/config.txt', 'r' ).read ( )
 
-				path    = abspath ( expanduser ( re.search ( r'PLANTUML PATH\s*path=([^\s]+)', data ).group ( 1 ) ) )
 
-				regex   = re.compile ( r'[P|p][L|l][A|a][N|n][T|t][U|u][M|m][L|l][^j]+jar' )
-				
+				try:
 
-				for file in os.listdir ( os.fsdecode ( path ) ):
+					path  = re.search ( r'PLANTUML PATH\s*path=([^\s]+)', data ).group ( 1 )
 
-					if regex.match ( file ):
+					path  = abspath ( expanduser ( path ) )
 
-						program = file
+					regex = re.compile ( r'[P|p][L|l][A|a][N|n][T|t][U|u][M|m][L|l][^j]+jar' )
 
 
-				if program:
+					for file in os.listdir ( os.fsdecode ( path ) ):
 
-					arguments.update ( { 'plant_path': f'{path}/{program}' } )
+						if regex.match ( file ):
+
+							program = file
+
+
+					if program:
+
+						arguments.update ( { 'plant_path': f'{path}/{program}' } )
+
+				except Exception:
+
+					print ( ' >> [ERROR] parse_commands.py\n\t~ Could not locate PlantUml path or program !\n\t~ Please check config.txt !' )
 
 	#### 	LOGIC 		####################################
 

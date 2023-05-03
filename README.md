@@ -38,10 +38,52 @@ git clone https://github.com/Justin-Byrne/ClassGenerator.git
 
 ## Usage
 
-> Python
+> Help menu
 
-```sh
-> python3 BuildClass.py <source> [<destination>] [<flag>] [<flag_value>]
+```
+python3 BuildClass.py {<source>} [<destination>] [flags] [args[|args...]]
+
+PATHS . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+source				File or directory location of javascript file(s) to convert
+
+				usage:
+					(single)    "/javascript/classes/one.js"
+					(multiple)  "/javascript/classes"
+
+destination			File or directory location to save class diagrams
+
+				usage:
+					(single)    "/javascript/classes/output/one.txt"
+					(multiple)  "/javascript/classes/output"
+
+FLAGS . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+-o, --omit "<filename>"		Omit the following filenames from the source directory
+
+				usage:
+					(single)   	--omit "file1"
+					(multiple) 	--omit "file1|file2|file3"
+
+-s, --skin "<skinparam>"	Embed skin parameters within the class uml generated
+
+				usage:
+					(single)     --skin "skinparam+one+1"
+					(multiple)   --skin "skinparam+one+1|skinparam+two+2"
+
+-m, --make "<image_type>"	Make the class generated diagram into an image
+
+				usage:
+					(single) 	--make "png"
+					(multiple)	--make "png|svg|eps"
+
+-l, --link			Link available classes to generated class diagrams
+
+				usage: --link
+
+-h, --help			Display this help menu
+
+				usage: --help
 ```
 
 ## Configuration

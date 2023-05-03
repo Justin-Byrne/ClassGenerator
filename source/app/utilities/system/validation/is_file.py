@@ -17,7 +17,7 @@ def is_file ( path, type ):
 
 			else:
 
-				print ( "type: {}, is not a valid file type !".format ( type ) );
+				print ( ' >> [ERROR] is_file.py\n', f'\t~ Type: "{type}", is not a valid file type !' )
 
 				return False
 

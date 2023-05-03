@@ -2,8 +2,6 @@ def view_arguments ( arguments ):
 
 	print ( '-' * 100 )
 
-	print ( "Flag: \t\t",      arguments [ 'flag'        ] )
-
 	print ( "Source: \t",      arguments [ 'source'      ] )
 
 	print ( "Destination: \t", arguments [ 'destination' ] )

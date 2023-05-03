@@ -1,6 +1,22 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.7.8] - 2023-05-03
+### Added
+- Help menu to `get_commands ( )`
+
+### Changed
+- Minor error refinement:
+  - `view_arguments ( )`
+  - `create_2d_list ( )`
+  - `entry_padding ( )`
+  - `parse_commands ( )`
+  - `repeat_character ( )`
+  - `is_file ( )`
+
+### Fixed
+- Path validation for PlantUml program executable under `parse_commands ( )`
+
 ## [0.7.7] - 2023-05-03
 ### Fixed
 - PlantUml program executable location management under `parse_commands ( )`
@@ -133,7 +149,8 @@ All notable changes to this project will be documented in this file.
 
 | Version | Date       | Commit                                                                   | Comments 														  |
 | :-----: | :--------: | :----------------------------------------------------------------------: | :---------------------------------------------------------------- |
-| 0.7.7   | 2023-05-03 | Current                                                                  | PlantUml program executable location management
+| 0.7.8   | 2023-05-03 | Current                                                                  | Help menu implemented
+| 0.7.7   | 2023-05-03 | [bb4ef56](https://github.com/Justin-Byrne/ClassGenerator/commit/bb4ef56) | PlantUml program executable location management
 | 0.7.6   | 2023-05-02 | [63dab81](https://github.com/Justin-Byrne/ClassGenerator/commit/63dab81) | Fully implemented class linker
 | 0.6.5   | 2023-04-29 | [ed8937b](https://github.com/Justin-Byrne/ClassGenerator/commit/ed8937b) | Expanded config, validation, and debugging
 | 0.5.5   | 2023-04-27 | [ae2d7e9](https://github.com/Justin-Byrne/ClassGenerator/commit/ae2d7e9) | Finalized generator processes and unit-tests
