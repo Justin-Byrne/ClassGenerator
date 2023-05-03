@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.7.7] - 2023-05-03
+### Fixed
+- PlantUml program executable location management under `parse_commands ( )`
+
 ## [0.7.6] - 2023-05-02
 ### Added
 - Fully implemented class linker; to link referenced classes
@@ -129,7 +133,8 @@ All notable changes to this project will be documented in this file.
 
 | Version | Date       | Commit                                                                   | Comments 														  |
 | :-----: | :--------: | :----------------------------------------------------------------------: | :---------------------------------------------------------------- |
-| 0.7.6   | 2023-05-02 | Current                                                                  | Fully implemented class linker
+| 0.7.7   | 2023-05-03 | Current                                                                  | PlantUml program executable location management
+| 0.7.6   | 2023-05-02 | [63dab81](https://github.com/Justin-Byrne/ClassGenerator/commit/63dab81) | Fully implemented class linker
 | 0.6.5   | 2023-04-29 | [ed8937b](https://github.com/Justin-Byrne/ClassGenerator/commit/ed8937b) | Expanded config, validation, and debugging
 | 0.5.5   | 2023-04-27 | [ae2d7e9](https://github.com/Justin-Byrne/ClassGenerator/commit/ae2d7e9) | Finalized generator processes and unit-tests
 | 0.5.2   | 2023-04-26 | [2256899](https://github.com/Justin-Byrne/ClassGenerator/commit/2256899) | Implemented configuration file and parsing methods

@@ -1,6 +1,7 @@
 import re
+import os
 
-from os.path 					import dirname
+from os.path 					import dirname, abspath, expanduser
 
 from .list.list_to_string 		import list_to_string
 from .get_command_type 			import get_command_type
@@ -13,7 +14,8 @@ def parse_commands ( commands ):
 	arguments = {
 		'flag':        None,
 		'source':      None,
-		'destination': None
+		'destination': None,
+		'link_files':  False
 	}
 
 	regexes = {
@@ -155,17 +157,25 @@ def parse_commands ( commands ):
 
 			if is_program ( 'java' ):
 
-				data = open ( './config/config.txt', 'r' ).read ( )
+				program = None
 
-				path = re.search ( r'PLANTUML PATH\s*path=([^\s]+)', data ).group ( 1 )
+				data    = open ( './config/config.txt', 'r' ).read ( )
+
+				path    = abspath ( expanduser ( re.search ( r'PLANTUML PATH\s*path=([^\s]+)', data ).group ( 1 ) ) )
+
+				regex   = re.compile ( r'[P|p][L|l][A|a][N|n][T|t][U|u][M|m][L|l][^j]+jar' )
+				
+
+				for file in os.listdir ( os.fsdecode ( path ) ):
+
+					if regex.match ( file ):
+
+						program = file
 
 
-				if re.search ( r'plantuml\.jar', path ) == None:
+				if program:
 
-					path = f"{path.rstrip ( '/' )}/plantuml.jar"
-
-
-				arguments.update ( { 'plant_path': path } )
+					arguments.update ( { 'plant_path': f'{path}/{program}' } )
 
 	#### 	LOGIC 		####################################
 
