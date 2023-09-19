@@ -26,4 +26,4 @@
 # braille
 
 ####	PLANTUML PATH
-# path=~/Programs/PlantUML
+# path=~/Programs/Tools/PlantUML
