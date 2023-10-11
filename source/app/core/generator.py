@@ -2,444 +2,366 @@ import os
 import re
 import subprocess
 
-from utilities.util 						import Util
-from utilities.system.file.get_files 		import get_files
-from utilities.custom.debug.view_arguments	import view_arguments
+from utilities.util                         import Util
 
-from .linker 								import Linker
+from .linker                                import Linker
 
 class Generator:
 
-	def __init__( self, arguments ):
+    def __init__( self, arguments ):
 
-		#### 	GLOBALS 	################################
+        ####    GLOBALS     ################################
 
-		self.arguments   = arguments
+        self.arguments       = arguments
 
-		self.files       = [ ]
+        self.files           = [ ]
 
-		self.output_path = None
+        self.output_path     = None
 
-		self.diagram     = { }
+        ########################################
 
-		self.tags = {
-	  		'properties': '',
-	  		'setters':    '__ Setter __',
-	  		'getters':    '__ Getter __',
-	  		'utilities':  '__ Utility __'
-		}
+        self.class_header    = None
 
-		#### 	INITIALIZE 	################################
+        self.template        = { }
 
-		# view_arguments ( arguments )
+        self.plantuml_script = None
 
-		self.init ( )
+        self.tags = {
+            'properties': '',
+            'setters':    '__ Setter __',
+            'getters':    '__ Getter __',
+            'utilities':  '__ Utility __'
+        }
 
-	#### 	INITIATORS 	########################################
+        ####    INITIALIZATION    ##########################
 
-	def init ( self ):
+        # Util.view_arguments ( arguments )
 
-		self.get_files ( )
+        self.init ( )
 
-		self.compile   ( )
+    ####    INITIATORS  ########################################################
 
-	#### 	GETTERS 	########################################
+    def init    ( self ):
 
-	def get_files ( self ):
+        self.get_files ( )
 
-		if ( Util.is_file ( self.arguments [ 'source' ] ) ): 					# If: source is file
+        self.compile   ( )
 
-			self.files.append ( self.arguments [ 'source' ] )
 
-		elif ( Util.is_directory ( self.arguments [ 'source' ] ) ): 			# If: source is directory
+    def compile ( self ):
 
-			omissions = self.arguments [ 'omit_files' ] if 'omit_files' in self.arguments.keys ( ) else ''
+        for file in self.files:
 
-			self.files = Util.get_files ( self.arguments [ 'source' ], '.js', omissions )
+            self.process ( file )
 
-	def compile   ( self ):
+            self.render  ( file )
 
-		for file in self.files:
 
-			self.process ( file )
+    def process ( self, file ):
 
-			self.render  ( file )
+        self.template = {
+            'class': None,
+            'properties':
+            {
+                'names': [ ],
+                'types': [ ]
+            },
+            'setters':
+            {
+                'names': [ ],
+                'types': [ ]
+            },
+            'getters':
+            {
+                'names': [ ],
+                'types': [ ]
+            },
+            'utilities':
+            {
+                'names': [ ],
+                'types': [ ]
+            }
+        }
 
-	def process   ( self, file ):
+        self.get_header     ( file )
 
-		self.diagram = {
-			'class':      None,
-			'brief': 	  None,
-			'properties': [ ],
-			'setters':    [ ],
-			'getters':    [ ],
-			'utilities':  [ ],
-			'master':     None
-		}
+        self.get_class      ( file )
 
-		self.get_class      ( file )
+        self.get_properties ( file )
 
-		self.get_properties ( file )
+        self.get_mutators   ( file )
 
-		self.get_setters    ( file )
+        self.get_utilities  ( file )
 
-		self.get_getters    ( file )
 
-		self.get_utilities  ( file )
+    def render  ( self, file ):
 
-	def render    ( self, file ):
+        self.prepare_file    ( file )
 
-		self.prepare_file    ( file )
+        self.compose_header  ( )
 
-		self.compose_header  ( )
+        self.compose_members ( )
 
-		self.compose_members ( )
+        self.compose_footer  ( )
 
-		self.compose_footer  ( )
+        self.save_output     ( )
 
-		self.save_output     ( )
+        self.compose_image   ( )
 
-		self.compose_image   ( )
+    ####    GETTERS     ########################################################
 
-	#### 	GETTERS 	########################################
+    def get_files      ( self ):
 
-	def get_header     ( self, file ):
+        source = self.arguments [ 'source' ];
 
-		regex = {
-			'header': r'(\/\*\*[^@]+@class[^\/]+\/)',
-			'class':  r'@class\s*{.+}\s*(\w+)'
-		}
 
-		with open ( file, 'r' ) as reader:
+        if ( Util.is_file ( source ) ):                     # If: file
 
-			data = reader.read ( )
+            self.files.append ( source )
 
-			if re.search ( regex [ 'header' ], data ):
 
-				self.diagram [ 'brief' ] = re.search ( regex [ 'header' ], data ).group ( 1 )
+        if ( Util.is_directory ( source ) ):                # If: directory
 
-				self.diagram [ 'class' ] = re.search ( regex [ 'class'  ], data ).group ( 1 )
+            omissions  = Util.get_file_omissions ( self.arguments )
 
-	def get_class      ( self, file ):
+            self.files = Util.get_files ( source, '.js', omissions )
 
-		self.get_header ( file )
 
+    def get_header     ( self, file ):
 
-		if self.diagram [ 'class' ] == None:
+        regex = r'(\/\*\*[^@]+@class[^\/]+\/)'
 
-			with open ( file, 'r' ) as reader:
 
-				data = reader.read ( )
+        with open ( file, 'r' ) as reader:
 
-				self.diagram [ 'class' ] = re.search ( r'class\s*(\w+)[^{]+{', data ).group ( 1 )
+            data = reader.read ( )
 
-	def get_properties ( self, file ):
 
-		regex = {
-			'docstring': r'@property\s*{(.+)}\s*((\w+)|\[(\w+)=(\w+)\]?)',
-			'typical':   r'((#?)\w+)(\s*?)=(\s*?)(((new\s?)\w+)|\w+|\'\w+\'|\"\w+\");'
-		}
+            if re.search ( regex, data ):
 
-		#### 	FUNCTIONS 	################################
+                self.class_header = re.search ( regex, data ).group ( 1 )
 
-		def filter_tuples ( list ):
 
-			result = [ ]
+    def get_class      ( self, file ):
 
-			list   = re.findall ( regex [ 'typical' ], ( ' ' ).join ( list ) )
+        regex = r'class\s*(\w+)[^{]+{'
 
 
-			for entry in list:
+        with open ( file, 'r' ) as reader:
 
-				entry = [ entry for entry in entry if entry != ' ' and entry != '' ] [ 0:2 ]
+            data = reader.read ( )
 
+            self.template [ 'class' ] = re.search ( regex, data ).group ( 1 )
 
-				if entry [ 1 ].isdigit ( ): 						 entry [ 1 ] = 'number'
 
-				if re.search ( r'(\'\w+\'|\"\w+\")', entry [ 1 ] ):  entry [ 1 ] = 'string'
+    def get_properties ( self, file ):
 
-				if re.search ( r'(true|false)', entry [ 1 ] ): 		 entry [ 1 ] = 'boolean'
+        if self.class_header:
 
-				if re.search ( r'new ', entry [ 1 ] ): 				 entry [ 1 ] = 'Object'
+            regex = r'@property\s*{(.+)}\s*((\w+)|\[(\w+)=(\w+)\]?)'
 
+            temp  = re.findall ( regex, self.class_header )
 
-				result.append ( tuple ( entry ) )
 
+            for value in temp:
 
-			return result
+                self.template [ 'properties' ] [ 'names' ].append ( value [ 1 ] )
 
-		#### 	FUNCTIONS 	################################
+                self.template [ 'properties' ] [ 'types' ].append ( value [ 0 ] )
 
-		if self.diagram [ 'brief' ]:
+        else:
 
-			list = [ ]
+            regexes = {
+                'start':
+                [
+                    r'class\s*\w+'
+                ],
+                'close':
+                [
+                    r'\s{2,4}constructor\s*\(',
+                    r'\s{2,4}set\s*\w+(\s*?)\(',
+                    r'\s{2,4}get\s*\w+(\s*?)\('
+                ]
+            }
 
-			self.diagram [ 'properties' ] = re.findall ( regex [ 'docstring' ], self.diagram [ 'brief' ] )
+            bounds = Util.get_file_bounds ( file, regexes )
 
+            lines  = open ( file ).readlines ( )
 
-			for property in self.diagram [ 'properties' ]:
+            lines  = lines [ bounds [ 'start' ] : bounds [ 'close' ] ]
 
-				list += [ ( property [ 1 ], property [ 0 ] ) ]
 
+            self.template [ 'properties' ] = Util.filter_properties ( lines )
 
-			self.diagram [ 'properties' ] = list
 
-		else:
+    def get_mutators   ( self, file ):
 
-			list = [ ]
+        data  = open ( file, 'r' ).read ( )
 
-			construct = {
-				'start': False,
-				'open':  False
-			}
 
-			for i, line in enumerate ( open ( file, 'r' ).readlines ( ) ):
+        for mutator in [ 'set', 'get' ]:
 
-				if re.search ( r'class\s*\w+', line ):
+            mutator_type = mutator + 'ters'
 
-					construct [ 'start' ] = True
 
-					continue
+            # Docstring
 
+            regex    = r'@param\s*\{(\w+)\}[^\/]+\/[^s]+set\s(\w+)' if mutator == 'set' else r'@return\s*{(\w+)}[^\/]+\/[^g]+get\s(\w+)'
 
-				if construct [ 'start' ] is True  and \
-				   construct [ 'open'  ] is False and \
-				   line.find ( '{' ):
+            mutators = re.findall ( regex, data )
 
-					construct [ 'open' ] = True
 
+            for value in mutators:
 
-				if re.search ( r'\s{2,4}constructor\s*\(',  line ) or \
-				   re.search ( r'\s{2,4}set\s*\w+(\s*?)\(', line ) or \
-				   re.search ( r'\s{2,4}get\s*\w+(\s*?)\(', line ):
+                self.template [ mutator_type ] [ 'names' ].append ( value [ 1 ] )
 
-					break
+                self.template [ mutator_type ] [ 'types' ].append ( value [ 0 ] )
 
 
-				if construct [ 'open' ]:
+            # Vanilla
 
-					list.append ( line )
+            regex    = r'\s{2,4}' + mutator + r'\s*(\w+)\s*\([^\)]+\)'
 
+            mutators = re.findall ( regex, data )
 
-			self.diagram [ 'properties' ] = filter_tuples ( list )
 
-	def get_setters    ( self, file ):
+            for value in mutators:
 
-		regex = {
-			'docstring': r'@param\s*\{(\w+)\}[^\/]+\/[^s]+set\s(\w+)',
-			'typical':   r'\s{2,4}set(\s*)(\w+)\s*\([^\)]+\)'
-		}
+                if value not in self.template [ mutator_type ] [ 'names' ]:
 
-		data  = open ( file, 'r' ).read ( )
+                    self.template [ mutator_type ] [ 'names' ].append ( value )
 
+                    self.template [ mutator_type ] [ 'types' ].append ( None  )
 
-		self.diagram [ 'setters' ] = re.findall ( regex [ 'docstring' ], data )
 
-		self.diagram [ 'setters' ] = [ tuple[::-1] for tuple in self.diagram [ 'setters' ] ]
+    def get_utilities  ( self, file ):
 
+        data  = open ( file, 'r' ).read ( )
 
-		if not self.diagram [ 'setters' ]:
 
-			list = [ ]
+        # Docstring
 
+        regex     = r'@return\s*{(\w+)}[^\/]+\/\s*\b(?!return\b|let\b|this\b|if\b|switch\b|for\b)(\w+)\s*\([^\)]+\)'
 
-			self.diagram [ 'setters' ] = re.findall ( regex [ 'typical' ], data )
+        utilities = re.findall ( regex, data )
 
 
-			for tuple in self.diagram [ 'setters' ]:
+        for value in utilities:
 
-				list.append ( tuple [ 1 ] )
+            self.template [ 'utilities' ] [ 'names' ].append ( value [ 1 ] )
 
+            self.template [ 'utilities' ] [ 'types' ].append ( value [ 0 ] )
 
-			self.diagram [ 'setters' ] = list
 
-	def get_getters    ( self, file ):
+        # Vanilla
 
-		regex = {
-			'docstring': r'@return\s*{(\w+)}[^\/]+\/[^g]+get\s(\w+)',
-			'typical':   r'\s{2,4}get(\s*)(\w+)\s*\([^\)]+\)'
-		}
+        regex     = r'\s{2,4}\b(?!constructor\b|return\b|let\b|this\b|if\b|switch\b|for\b)(\w+)\s*\([^\)]+\)'
 
-		data  = open ( file, 'r' ).read ( )
+        utilities = re.findall ( regex, data )
 
 
-		self.diagram [ 'getters' ] = re.findall ( regex [ 'docstring' ], data )
+        for value in utilities:
 
-		self.diagram [ 'getters' ] = [ tuple[::-1] for tuple in self.diagram [ 'getters' ] ]
+            if value not in self.template [ 'utilities' ] [ 'names' ]:
 
+                self.template [ 'utilities' ] [ 'names' ].append ( value )
 
-		if not self.diagram [ 'getters' ]:
+                self.template [ 'utilities' ] [ 'types' ].append ( None  )
 
-			list = [ ]
+    ####    RENDERERS   ########################################################
 
+    def prepare_file    ( self, file ):
 
-			self.diagram [ 'getters' ] = re.findall ( regex [ 'typical' ], data )
+        self.output_path = Util.set_file ( file, self.arguments [ 'destination'] )
 
+        open ( self.output_path, 'w+' )
 
-			for tuple in self.diagram [ 'getters' ]:
 
-				list.append ( tuple [ 1 ] )
+    def compose_header  ( self ):
 
+        header = f"@startuml\n\n"
 
-			self.diagram [ 'getters' ] = list
 
-	def get_utilities  ( self, file ):
+        if 'skin_param' in self.arguments.keys ( ):
 
-		list  = [ ]
+            for skin_param in self.arguments [ 'skin_param' ]:
 
-		temp  = [ ]
+                header += f"{skin_param}\n"
 
-		regex = {
-			'docstring': r'@return\s*{(\w+)}[^\/]+\/\s*\b(?!return\b|let\b|this\b|if\b|switch\b|for\b)(\w+)\s*\([^\)]+\)',
-			'typical':   r'\s{2,4}\b(?!constructor\b|return\b|let\b|this\b|if\b|switch\b|for\b)(\w+)\s*\([^\)]+\)'
-		}
 
-		list  = re.findall ( regex [ 'docstring' ], open ( file, 'r' ).read ( ) )
+            header += "\n"
 
-		temp  = re.findall ( regex [ 'typical'   ], open ( file, 'r' ).read ( ) )
 
+        header += f"class {self.template [ 'class' ]} {{\n"
 
-		if list:
 
-			list = [ tuple[::-1] for tuple in list ]
+        self.plantuml_script = header
 
 
-		if len ( temp ) > len ( list ):
+    def compose_members ( self ):
 
-			for i in range ( len ( list ), -1, -1 ):
+        members = ''
 
-				try:
+        pad     = 3
 
-					if list [ i ] [ 0 ] == temp [ i ]:
+        column_max = Util.get_column_max ( self.template ) + pad
 
-						del temp [ i ]
 
-				except IndexError:
+        for tag_type in self.tags:
 
-					pass
+            members += f"{self.tags [ tag_type ]}\n".lstrip (  )
 
 
-		self.diagram [ 'utilities' ] = ( list + temp )
+            if self.template [ tag_type ] [ 'names' ]:
 
-	#### 	RENDERERS 	########################################
+                for i, name in enumerate ( self.template [ tag_type ] [ 'names' ] ):
 
-	def prepare_file    ( self, file ):
 
-		if re.search ( r'\w.+\.txt', self.arguments [ 'destination' ] ):
+                    if self.template [ tag_type ] [ 'types' ]:
 
-			directory = os.path.dirname ( self.arguments [ 'destination' ] )
+                        padding  = column_max - len ( name )
 
-			self.output_path = f"{self.arguments [ 'destination' ]}"
+                        type     = Util.filter_type ( self.template [ tag_type ] [ 'types' ] [ i ] )
 
+                        members += f"{name}{' ' * padding}{type}\n" if type else f"{name}\n"
 
-			if Util.is_directory ( directory ) is False:
 
-				os.makedirs ( directory )
+        self.plantuml_script += members
 
-		else:
 
-			filename = os.path.basename ( file ).split ( '/' ) [ -1 ].replace ( '.js', '' )
+    def compose_footer  ( self ):
 
-			self.output_path = f"{self.arguments [ 'destination' ]}/{filename}.txt"
+        self.plantuml_script += f"}}\n\n@enduml"
 
 
-			if Util.is_directory ( self.arguments [ 'destination' ] ) is False:
+    def save_output     ( self ):
 
-				os.makedirs ( self.arguments [ 'destination' ] )
+        with open ( self.output_path, 'w' ) as writer:
 
+            writer.write ( self.plantuml_script )
 
-		open ( self.output_path, 'w+' )
+            print ( ">>  [ output ] \n", f"{self.output_path}" )
 
-	def compose_header  ( self ):
 
-		data = f"@startuml\n\n"
+    def compose_image   ( self ):
 
+        if 'plant_path' in self.arguments.keys ( ):
 
-		if 'skin_param' in self.arguments.keys ( ):
+            for image_type in self.arguments [ 'make_image' ]:
 
-			for skin in self.arguments [ 'skin_param' ]:
+                output_path = f"{os.path.dirname ( self.output_path )}/images"
 
-				data += f"{skin}\n"
+                command     = f"java -jar {self.arguments [ 'plant_path' ]} \"{self.output_path}\" -o \"{output_path}\" -{image_type}"
 
-			data += "\n"
+                filename    = os.path.basename ( self.output_path ).replace ( 'txt', image_type )
 
 
-		data += f"class {self.diagram [ 'class' ]} {{"
+                if Util.is_directory ( output_path ) is False:
 
+                    os.makedirs ( output_path )
 
-		self.diagram [ 'master' ] = data
 
-	def compose_members ( self ):
+                subprocess.run ( command, shell=True )
 
-		data = ''
 
-
-		for tag in self.tags:
-
-			if self.diagram [ tag ]:
-
-				data += f"{self.tags [ tag ]}\n"
-
-				grid = Util.entry_padding ( self.diagram [ tag ] )
-
-
-				for i, entry in enumerate ( self.diagram [ tag ] ):
-
-					if isinstance ( entry, tuple ):
-
-						spacing = Util.repeat_character ( ' ', grid [ i ] )
-
-						if entry [ 1 ] == 'number'  or \
-						   entry [ 1 ] == 'string'  or \
-						   entry [ 1 ] == 'boolean' or \
-						   entry [ 1 ] == 'Object':
-
-							data += f"{entry [ 0 ]}{spacing}<color:gray>{{{entry [ 1 ]}}}</color>\n"
-
-						else:
-
-							data += f"{entry [ 0 ]}{spacing}{{{entry [ 1 ]}}}\n"
-
-					else:
-
-						data += f"{entry}\n"
-
-
-		self.diagram [ 'master' ] += data
-
-	def compose_footer  ( self ):
-
-		self.diagram [ 'master' ] += f"}}\n@enduml"
-
-	def save_output     ( self ):
-
-		with open ( self.output_path, 'w' ) as writer:
-
-			writer.write ( self.diagram [ 'master' ] )
-
-			print ( ">>  [ output ] \n", f"{self.output_path}" )
-
-	def compose_image   ( self ):
-
-		if 'plant_path' in self.arguments.keys ( ):
-
-			for image_type in self.arguments [ 'make_image' ]:
-
-				output_path = f"{os.path.dirname ( self.output_path )}/images"
-
-				command     = f"java -jar {self.arguments [ 'plant_path' ]} \"{self.output_path}\" -o \"{output_path}\" -{image_type}"
-
-				filename    = os.path.basename ( self.output_path ).replace ( 'txt', image_type )
-
-
-				if Util.is_directory ( output_path ) is False:
-
-					os.makedirs ( output_path )
-
-
-				subprocess.run ( command, shell=True )
-
-
-				print ( f" {output_path}/{filename}\n" )
-
-		return True
+                print ( f" {output_path}/{filename}\n" )

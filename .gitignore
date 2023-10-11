@@ -12,6 +12,7 @@ _dump/
 
 ## Tests
 *-test-[0-9].*
+tests
 
 ## Stashes
 **/*-{stash-[0-9]}.*

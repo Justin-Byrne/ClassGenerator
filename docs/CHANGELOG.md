@@ -1,6 +1,27 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.8.8] - 2023-10-11
+### Changed
+- Refactored and cleaned entire `generator` class
+
+### Added
+- Added the following utilities
+  - `filter_properties ( )`
+  - `filter_type ( )`
+  - `get_column_max ( )`
+  - `get_file_bounds ( )`
+  - `set_file ( )`
+
+### Removed
+- Removed the following utilities
+  - `get_eof ( )`
+  - `entry_padding ( )`
+  - `create_2d_list ( )`
+  - `repeat_character ( )`
+  - `list_to_string ( )`
+  - `clean_properties ( )`
+
 ## [0.7.8] - 2023-05-03
 ### Added
 - Help menu to `get_commands ( )`

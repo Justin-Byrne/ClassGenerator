@@ -1,2 +1,3 @@
 source/tests/cases/source/* linguist-vendored
 source/tests/cases/source/sub/* linguist-vendored
+build/* linguist-vendored

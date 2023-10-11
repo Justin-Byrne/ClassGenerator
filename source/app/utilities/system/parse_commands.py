@@ -3,7 +3,6 @@ import os
 
 from os.path 					import dirname, abspath, expanduser
 
-from .list.list_to_string 		import list_to_string
 from .get_command_type 			import get_command_type
 from .validation.is_program 	import is_program
 

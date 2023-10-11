@@ -1,13 +1,13 @@
 # ClassGenerator
 
 ![issues](https://img.shields.io/github/issues/Justin-Byrne/ClassGenerator)
-![forks](https://img.shields.io/github/forks/Justin-Byrne/ClassGenerator)
-![stars](https://img.shields.io/github/stars/Justin-Byrne/ClassGenerator)
 ![license](https://img.shields.io/github/license/Justin-Byrne/ClassGenerator)
-<img src="https://img.shields.io/badge/Python-3.11.2-blue" />
-<img src="https://img.shields.io/badge/PlantUML-1.2.023.4-purple" />
-<img src="https://img.shields.io/badge/Graphviz-8.0.5-green" />
- 
+<img src=https://img.shields.io/badge/Python-3.11.2-blue />
+<img src=https://img.shields.io/badge/PlantUML-1.2.023.4-purple />
+<img src=https://img.shields.io/badge/Graphviz-8.0.5-gray />
+<img src=https://img.shields.io/badge/Version-0.8.8-green />
+<img src=https://img.shields.io/github/languages/code-size/Justin-Byrne/ClassGenerator />
+
 PlantUML class generator for JavaScript
 
 - [Requirements](#requirements)
@@ -17,7 +17,6 @@ PlantUML class generator for JavaScript
 - [Examples](#examples)
 - [Support](#support)
 - [Structure](#structure)
-- [Copyright](#copyright)
 
 ## Requirements
 
@@ -45,45 +44,45 @@ python3 BuildClass.py {<source>} [<destination>] [flags] [args[|args...]]
 
 PATHS . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-source				File or directory location of javascript file(s) to convert
+source                       File or directory location of javascript file(s) to convert
 
-				usage:
-					(single)    "/javascript/classes/one.js"
-					(multiple)  "/javascript/classes"
+                             usage:
+                                 (single)    "/javascript/classes/one.js"
+                                 (multiple)  "/javascript/classes"
 
-destination			File or directory location to save class diagrams
+destination                  File or directory location to save class diagrams
 
-				usage:
-					(single)    "/javascript/classes/output/one.txt"
-					(multiple)  "/javascript/classes/output"
+                                 usage:
+                                     (single)    "/javascript/classes/output/one.txt"
+                                     (multiple)  "/javascript/classes/output"
 
 FLAGS . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
--o, --omit "<filename>"		Omit the following filenames from the source directory
+-o, --omit "<filename>"      Omit the following filenames from the source directory
 
-				usage:
-					(single)   	--omit "file1"
-					(multiple) 	--omit "file1|file2|file3"
+                             usage:
+                                 (single)    --omit "file1"
+                                 (multiple)  --omit "file1|file2|file3"
 
--s, --skin "<skinparam>"	Embed skin parameters within the class uml generated
+-s, --skin "<skinparam>"     Embed skin parameters within the class uml generated
 
-				usage:
-					(single)     --skin "skinparam+one+1"
-					(multiple)   --skin "skinparam+one+1|skinparam+two+2"
+                             usage:
+                                 (single)    --skin "skinparam+one+1"
+                                 (multiple)  --skin "skinparam+one+1|skinparam+two+2"
 
--m, --make "<image_type>"	Make the class generated diagram into an image
+-m, --make "<image_type>"    Make the class generated diagram into an image
 
-				usage:
-					(single) 	--make "png"
-					(multiple)	--make "png|svg|eps"
+                             usage:
+                                 (single)    --make "png"
+                                 (multiple)  --make "png|svg|eps"
 
--l, --link			Link available classes to generated class diagrams
+-l, --link                   Link available classes to generated class diagrams
 
-				usage: --link
+                             usage: --link
 
--h, --help			Display this help menu
+-h, --help                   Display this help menu
 
-				usage: --help
+                             usage: --help
 ```
 
 ## Configuration
@@ -93,18 +92,18 @@ Configurations settings for each generated file can be set within `../app/config
 > These settings are commented out by default
 
 ```bash
-#### 	FILE OMISSIONS
+####    FILE OMISSIONS
 one
 two
 three
 
-#### 	SKIN PARAM
+####    SKIN PARAM
 left to right direction
 skinparam DefaultFontSize 16
-skinparam DefaultFontName Courier 10 Pitch
+skinparam DefaultFontName Courier New
 skinparam ClassAttributeIconSize 0
 
-#### 	IMAGE OUTPUT
+####    IMAGE OUTPUT
 png
 svg
 eps
@@ -120,7 +119,7 @@ latex
 latex:nopreamble
 braille
 
-####	PLANTUML PATH
+####    PLANTUML PATH
 path=~/Programs/PlantUML
 
 ```
@@ -307,62 +306,59 @@ prop3
 </tr>
 </table>
 
+
 ## Support
 
 Please [open an issue](https://github.com/Justin-Byrne/ClassGenerator/issues/new) for support.
-
 
 ## Structure
 
 ```
 .
-├── LICENSE
-├── README.md
 ├── docs
-│   └── CHANGELOG.md
-└── source
-    └── app
-        ├── BuildClass.py
-        ├── config
-        │   └── config.txt
-        ├── core
-        │   ├── generator.py
-        │   └── linker.py
-        ├── test-generator.py
-        └── utilities
-            ├── custom
-            │   ├── cleanup
-            │   │   └── clean_properties.py
-            │   ├── debug
-            │   │   └── view_arguments.py
-            │   └── validation
-            │       ├── is_extension.py
-            │       └── is_js_class.py
-            ├── system
-            │   ├── file
-            │   │   ├── get_eof.py
-            │   │   └── get_files.py
-            │   ├── get_command_type.py
-            │   ├── get_commands.py
-            │   ├── list
-            │   │   ├── create_2d_list.py
-            │   │   ├── entry_padding.py
-            │   │   └── list_to_string.py
-            │   ├── parse_commands.py
-            │   ├── string
-            │   │   └── repeat_character.py
-            │   └── validation
-            │       ├── is_directory.py
-            │       ├── is_file.py
-            │       ├── is_flag.py
-            │       └── is_program.py
-            └── util.py
+│   ├── CHANGELOG.md
+│   └── FUNDING.yml
+├── source
+│   └── app
+│       ├── config
+│       │   └── config.txt
+│       ├── core
+│       │   ├── generator.py
+│       │   └── linker.py
+│       ├── utilities
+│       │   ├── custom
+│       │   │   ├── debug
+│       │   │   │   └── view_arguments.py
+│       │   │   ├── filter
+│       │   │   │   ├── filter_properties.py
+│       │   │   │   └── filter_type.py
+│       │   │   ├── list
+│       │   │   │   └── get_column_max.py
+│       │   │   └── validation
+│       │   │       ├── is_extension.py
+│       │   │       └── is_js_class.py
+│       │   ├── system
+│       │   │   ├── file
+│       │   │   │   ├── get_file_bounds.py
+│       │   │   │   ├── get_file_omissions.py
+│       │   │   │   ├── get_files.py
+│       │   │   │   └── set_file.py
+│       │   │   ├── validation
+│       │   │   │   ├── is_directory.py
+│       │   │   │   ├── is_file.py
+│       │   │   │   ├── is_flag.py
+│       │   │   │   └── is_program.py
+│       │   │   ├── get_command_type.py
+│       │   │   ├── get_commands.py
+│       │   │   └── parse_commands.py
+│       │   └── util.py
+│       └── BuildClass.py
+├── LICENSE
+└── README.md
 ```
-
+ 
 ## Copyright
 
 ![Byrne-Systems](https://github.com/Justin-Byrne/ClassGenerator/blob/main/images/cube_sm.png)
 
 == Byrne-Systems © 2023 - All rights reserved. ==
-
-:lotus_position:
