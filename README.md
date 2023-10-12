@@ -5,7 +5,7 @@
 <img src=https://img.shields.io/badge/Python-3.11.2-blue />
 <img src=https://img.shields.io/badge/PlantUML-1.2.023.4-purple />
 <img src=https://img.shields.io/badge/Graphviz-8.0.5-gray />
-<img src=https://img.shields.io/badge/Version-0.8.8-green />
+<img src=https://img.shields.io/badge/Version-0.8.9-green />
 <img src=https://img.shields.io/github/languages/code-size/Justin-Byrne/ClassGenerator />
 
 PlantUML class generator for JavaScript
@@ -93,9 +93,9 @@ Configurations settings for each generated file can be set within `../app/config
 
 ```bash
 ####    FILE OMISSIONS
-one
-two
-three
+filename_one
+filename_two
+filename_three
 
 ####    SKIN PARAM
 left to right direction
@@ -122,6 +122,12 @@ braille
 ####    PLANTUML PATH
 path=~/Programs/PlantUML
 
+```
+
+<b>Note:</b> for best results use the following skin-params:
+```bash
+skinparam DefaultFontSize 16
+skinparam DefaultFontName Courier New
 ```
 
 ## Examples
@@ -168,10 +174,10 @@ class ClassName
 @startuml
 
 class ClassName {
-_prop0   <color:gray>{number}</color>
-_prop1   <color:gray>{string}</color>
-_prop2   <color:gray>{Object}</color>
-_prop3   <color:gray>{Object}</color>
+_prop0   {number}
+_prop1   {string}
+_prop2   {Object}
+_prop3   {Object}
 __ Setter __
 prop0
 prop1
@@ -244,8 +250,8 @@ class One
 @startuml
 
 class One {
-prop0   <co..ay>{number}</co.or>
-prop1   <co..ay>{string}</co.or>
+prop0   {number}
+prop1   {string}
 prop2   {Two}
 prop3   {Three}
 __ Setter __
@@ -263,8 +269,8 @@ One *-- Three
 One *-- Two
 
 class Two {
-prop0   <co..ay>{number}</co.or>
-prop1   <co..ay>{string}</co.or>
+prop0   {number}
+prop1   {string}
 prop2   {One}
 prop3   {Three}
 __ Setter __
@@ -280,8 +286,8 @@ prop3
 }
 
 class Three {
-prop0   <co..ay>{number}</co.or>
-prop1   <co..ay>{string}</co.or>
+prop0   {number}
+prop1   {string}
 prop2   {One}
 prop3   {Two}
 __ Setter __

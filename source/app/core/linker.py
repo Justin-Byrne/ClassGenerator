@@ -10,13 +10,15 @@ class Linker:
 
 		#### 	GLOBALS 	################################
 
+		self.arguments    = arguments
+
 		self.file         = ''
 
 		self.files        = [ ]
 
 		self.files_linked = { }
 
-		self.arguments    = arguments
+		########################################
 
 		self.classes      = [ ]
 
@@ -24,21 +26,30 @@ class Linker:
 
 		self.regexes      = [ ]
 
-		#### 	INITIALIZE 	################################
+		####    INITIALIZATION    ##########################
 
 		self.init ( )
 
-	#### 	INITIATORS 	########################################
+	####    INITIATORS  ########################################################
 
-	def init ( self ):
+	def init    ( self ):
 
 		self.get_files ( )
 
 		self.process   ( )
 
-	#### 	GETTERS 	########################################
 
-	def get_files     ( self ):
+	def process ( self ):
+
+		for file in self.files:
+
+			self.read_file   ( file )
+
+			self.match_files ( )
+
+	####    GETTERS     ########################################################
+
+	def get_files ( self ):
 
 		for ( root, dirs, file ) in os.walk ( self.arguments [ 'destination' ] ):
 
@@ -50,13 +61,7 @@ class Linker:
 
 						self.files.append ( f"{root}/{entry}" )
 
-	def process       ( self ):
-
-		for file in self.files:
-
-			self.read_file   ( file )
-
-			self.match_files ( )
+	####    UTILITIES   ########################################################
 
 	def read_file     ( self, file ):
 
@@ -66,6 +71,7 @@ class Linker:
 
 		self.objects = set ( re.findall ( r'(\w+)\s{2,}\{([^\}]+)\}', data ) )
 
+
 	def match_files   ( self ):
 
 		self.find_files    ( )
@@ -74,18 +80,20 @@ class Linker:
 
 		self.link_objects  ( )
 
+
 	def find_files    ( self ):
 
-		self.regexes = [ ]
+		self.regexes = [ ] 									# clear self.regexes
 
 
 		if self.objects:
 
 			for object in self.objects:
 
-				regex = ''
+				regex  = ''
 
 				object = object [ 1 ]
+
 
 				object_lo, object_up = object.lower ( ), object.upper ( )
 
@@ -100,9 +108,10 @@ class Linker:
 
 				self.regexes.append ( regex )
 
+
 	def match_objects ( self ):
 
-		self.classes = [ ]
+		self.classes = [ ] 									# clear self.classes
 
 
 		if self.files:
@@ -123,9 +132,8 @@ class Linker:
 
 							self.classes.append ( source )
 
-	def link_objects  ( self ):
 
-		#### 	GLOBALS 	################################
+	def link_objects  ( self ):
 
 		links  = [ ]
 
@@ -135,62 +143,58 @@ class Linker:
 
 		header = re.findall ( r'class\s*([^\s]+)\s*', data ) [ 0 ]
 
-		#### 	FUNCTIONS 	################################
 
-		def assemble_links ( data ):
+		for object in self.objects:
 
-			for object in self.objects:
-
-				links.append ( f"{header} *-- {object [ 1 ]}" )
+			links.append ( f"{header} *-- {object [ 1 ]}" )
 
 
-			links.append ( '@enduml\n' )
+		links.append ( '@enduml\n' )
 
-			data = data.replace ( '@enduml', '\n'.join ( links ) )
-
-
-			for entry in self.classes:
-
-				CLASS_UML = open ( entry, 'r' ).read ( )
-
-				data     += f'\n{CLASS_UML}\n'
+		data = data.replace ( '@enduml', '\n'.join ( links ) )
 
 
-			data = re.sub ( r'@enduml\s*@startuml', '', data )
+		for entry in self.classes:
+
+			CLASS_UML = open ( entry, 'r' ).read ( )
+
+			data     += f'\n{CLASS_UML}\n'
 
 
-			with open ( file, 'w' ) as writer:
-
-				writer.write ( data )
+		data = re.sub ( r'@enduml\s*@startuml', '', data )
 
 
-			print ( '>> [ output ]\n', file )
+		with open ( file, 'w' ) as writer:
 
-		def compose_image  ( file ):
-
-			if 'plant_path' in self.arguments.keys ( ):
-
-				for image_type in self.arguments [ 'make_image' ]:
-
-					output_path = f"{os.path.dirname ( file )}/images"
-
-					command     = f"java -jar {self.arguments [ 'plant_path' ]} \"{file}\" -o \"{output_path}\" -{image_type}"
-
-					filename    = os.path.basename ( file ).replace ( 'txt', image_type )
+			writer.write ( data )
 
 
-					if Util.is_directory ( output_path ) is False:
-
-						os.makedirs ( output_path )
+		print ( '>> [ output ]\n', file )
 
 
-					subprocess.run ( command, shell=True )
+		self.compose_image  ( file )
+
+	####    RENDERERS   ########################################################
+
+	def compose_image ( self, file ):
+
+		if 'plant_path' in self.arguments.keys ( ):
+
+			for image_type in self.arguments [ 'make_image' ]:
+
+				output_path = f"{os.path.dirname ( file )}/images"
+
+				command     = f"java -jar {self.arguments [ 'plant_path' ]} \"{file}\" -o \"{output_path}\" -{image_type}"
+
+				filename    = os.path.basename ( file ).replace ( 'txt', image_type )
 
 
-					print ( f" {output_path}/{filename}\n" )
+				if Util.is_directory ( output_path ) is False:
 
-		#### 	LOGIC	 	################################
+					os.makedirs ( output_path )
 
-		assemble_links ( data )
 
-		compose_image  ( file )
+				subprocess.run ( command, shell=True )
+
+
+				print ( f" {output_path}/{filename}\n" )

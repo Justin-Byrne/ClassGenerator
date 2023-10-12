@@ -35,8 +35,6 @@ class Generator:
 
         ####    INITIALIZATION    ##########################
 
-        # Util.view_arguments ( arguments )
-
         self.init ( )
 
     ####    INITIATORS  ########################################################

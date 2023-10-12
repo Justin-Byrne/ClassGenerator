@@ -1,7 +1,7 @@
 #### 	FILE OMISSIONS
-# one
-# two
-# three
+# filename_one
+# filename_two
+# filename_three
 
 #### 	SKIN PARAM
 # left to right direction
