@@ -5,7 +5,7 @@
 <img src=https://img.shields.io/badge/Python-3.11.2-blue />
 <img src=https://img.shields.io/badge/PlantUML-1.2.023.4-purple />
 <img src=https://img.shields.io/badge/Graphviz-8.0.5-gray />
-<img src=https://img.shields.io/badge/Version-0.8.9-green />
+<img src=https://img.shields.io/badge/Version-0.9.9-green />
 <img src=https://img.shields.io/github/languages/code-size/Justin-Byrne/ClassGenerator />
 
 PlantUML class generator for JavaScript

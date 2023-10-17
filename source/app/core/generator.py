@@ -307,10 +307,10 @@ class Generator:
 
         for tag_type in self.tags:
 
-            members += f"{self.tags [ tag_type ]}\n".lstrip (  )
-
-
             if self.template [ tag_type ] [ 'names' ]:
+
+                members += f"{self.tags [ tag_type ]}\n".lstrip (  )
+
 
                 for i, name in enumerate ( self.template [ tag_type ] [ 'names' ] ):
 

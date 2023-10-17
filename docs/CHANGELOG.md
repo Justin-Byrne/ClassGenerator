@@ -1,6 +1,25 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.9.9] - 2023-10-17
+### Added
+- `Linker` class, `set_regexes ( )` function to set regexes for each identified class
+
+### Changed
+- `Linker` class
+  - `self.classes` global variable to `self.classSources` for specificity
+  - renamed `read_files ( )` to `get_objects ( )`
+  - refactored:
+    - `get_objects   ( )`
+    - `match_files   ( )`
+    - `find_files    ( )`
+    - `link_objects  ( )`
+    - `compose_image ( )`
+- `get_commands.py` to parse output to `_output` directory, instead of `output`
+
+### Fixed
+- `Generator` class, fixed issue where tag title parses regardless of no tag elements
+
 ## [0.8.9] - 2023-10-11
 ### Changed
 - Refactored and cleaned `linker` class
@@ -172,9 +191,11 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-| Version | Date       | Commit                                                                   | Comments 														  |
+| Version | Date       | Commit                                                                   | Comments                                                          |
 | :-----: | :--------: | :----------------------------------------------------------------------: | :---------------------------------------------------------------- |
-| 0.7.8   | 2023-05-03 | Current                                                                  | Help menu implemented
+| 0.9.9   | 2023-10-17 | Current                                                                  | Fixed linker class issues
+| 0.8.9   | 2023-10-11 | [cd79df5](https://github.com/Justin-Byrne/ClassGenerator/commit/cd79df5) | Refactored linker class
+| 0.8.8   | 2023-10-11 | [6154c3e](https://github.com/Justin-Byrne/ClassGenerator/commit/6154c3e) | Major refactoring of project
 | 0.7.7   | 2023-05-03 | [bb4ef56](https://github.com/Justin-Byrne/ClassGenerator/commit/bb4ef56) | PlantUml program executable location management
 | 0.7.6   | 2023-05-02 | [63dab81](https://github.com/Justin-Byrne/ClassGenerator/commit/63dab81) | Fully implemented class linker
 | 0.6.5   | 2023-04-29 | [ed8937b](https://github.com/Justin-Byrne/ClassGenerator/commit/ed8937b) | Expanded config, validation, and debugging
