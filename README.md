@@ -5,7 +5,7 @@
 <img src=https://img.shields.io/badge/Python-3.11.2-blue />
 <img src=https://img.shields.io/badge/PlantUML-1.2.023.4-purple />
 <img src=https://img.shields.io/badge/Graphviz-8.0.5-gray />
-<img src=https://img.shields.io/badge/Version-0.9.9-green />
+<img src=https://img.shields.io/badge/Version-0.10.15-red />
 <img src=https://img.shields.io/github/languages/code-size/Justin-Byrne/ClassGenerator />
 
 PlantUML class generator for JavaScript
@@ -339,7 +339,8 @@ Please [open an issue](https://github.com/Justin-Byrne/ClassGenerator/issues/new
 │       │   │   │   ├── filter_properties.py
 │       │   │   │   └── filter_type.py
 │       │   │   ├── list
-│       │   │   │   └── get_column_max.py
+│       │   │   │   ├── get_column_max.py
+│       │   │   │   └── replace_value.py
 │       │   │   └── validation
 │       │   │       ├── is_extension.py
 │       │   │       └── is_js_class.py
@@ -367,4 +368,4 @@ Please [open an issue](https://github.com/Justin-Byrne/ClassGenerator/issues/new
 
 ![Byrne-Systems](https://github.com/Justin-Byrne/ClassGenerator/blob/main/images/cube_sm.png)
 
-== Byrne-Systems © 2023 - All rights reserved. ==
+== Byrne-Systems © 2024 - All rights reserved. ==
