@@ -51,7 +51,7 @@ class Linker:
 
 	def get_files   ( self ):
 
-		for ( root, dirs, file ) in os.walk ( self.arguments [ 'destination' ] ):
+		for ( root, dirs, file ) in os.walk ( f"{self.arguments [ 'destination' ]}/text" ):
 
 			for entry in file:
 
@@ -67,16 +67,30 @@ class Linker:
 		self.objects = [ ] 									# clear self.objects
 
 
-		data    = open ( file, 'r' ).read ( )
+		data       = open ( file, 'r' ).read ( )
 
-		objects = re.findall ( r'(\w+)\s{2,}\{([^\}]+)\}', data )
+		objects    = re.findall ( r'(\w+)\s{2,}\{([^\}]+)\}', data )
+
+		arrow_type = r'.<([^>]+)>'
 
 
 		for object in objects: 								# Filter objects
 
-			if object [ 1 ] not in self.objects:
+			object_type = re.search ( arrow_type, object [ 1 ] )
 
-				self.objects.append ( object [ 1 ] )
+
+			if object_type:
+
+				object_type = object_type.group ( 1 );
+
+			else:
+
+				object_type = object [ 1 ];
+
+
+			if object_type not in self.objects:
+
+				self.objects.append ( object_type )
 
 
 		if self.objects: 									# If objects, store present file
@@ -93,6 +107,11 @@ class Linker:
 
 			for regex in self.regexes:
 
+				if '|||' in regex:
+
+					regex = regex.replace ( '|||', '|' )
+
+
 				files = ''.join ( self.files )
 
 				file  = re.search ( regex, files )
@@ -102,8 +121,7 @@ class Linker:
 
 					file   = file.group ( 0 ).lstrip ( '/' )
 
-					source = f"{self.arguments [ 'destination' ]}/{file}"
-
+					source = f"{self.arguments [ 'destination' ]}/text/{file}"
 
 					self.classSources.append ( source )
 
@@ -113,19 +131,36 @@ class Linker:
 
 		self.regexes = [ ] 									# clear self.regexes
 
+		arrow_type   = r'.<([^>]+)>'
+
 
 		if self.objects:
 
 			for object in self.objects:
 
-				regex  = ''
+				regex   = ''
 
-				object_lo, object_up = object.lower ( ), object.upper ( )
+				arrowed = re.search ( arrow_type, object )
 
 
-				for i in range ( len ( object ) ):
+				if arrowed:
+
+					group = arrowed.group ( 1 );
+
+					group = re.sub ( r'.+<([^>]+)>', r'\1', group )
+
+					object_lo, object_up = group.lower ( ), group.upper ( )
+
+				else:
+
+					object_lo, object_up = object.lower ( ), object.upper ( )
+
+
+
+				for i in range ( len ( object_lo ) ):
 
 					regex += f'[{object_lo [ i ]}|{object_up [ i ]}]'
+
 
 
 				self.regexes.append ( f"\/{regex}\.txt" )
@@ -148,7 +183,7 @@ class Linker:
 
 		if self.classSources:
 
-			destination = f"{self.arguments [ 'destination' ]}/linked"
+			destination = f"{self.arguments [ 'destination' ]}/text/linked"
 
 			filename    = os.path.basename ( self.file ).replace ( '.txt', '-linked.txt' )
 
@@ -159,7 +194,20 @@ class Linker:
 
 			for object in self.objects:
 
-				links.append ( f"{thisClass} o-- {object}" )
+				linked_object = object
+
+
+				if '|' in object:
+
+					linked_object = linked_object.replace ( '|', ' : ' )
+
+
+				if '<' in object:
+
+					linked_object = re.sub ( r'.+<([^>]+)>', r'\1', object )
+
+
+				links.append ( f"{thisClass} o-- {linked_object}" )
 
 
 			data = data.replace ( '@enduml', '\n'.join ( links ) ) + '\n\n@enduml'
@@ -194,7 +242,7 @@ class Linker:
 
 		for image_type in self.arguments [ 'make_image' ]:
 
-			output_path = f"{os.path.dirname ( file )}/images/linked"
+			output_path = f"{self.arguments [ 'destination' ]}/image/linked"
 
 			command     = f"java -jar {self.arguments [ 'plant_path' ]} \"{file}\" -o \"{output_path}\" -{image_type}"
 

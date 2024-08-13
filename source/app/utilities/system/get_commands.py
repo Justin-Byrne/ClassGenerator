@@ -78,11 +78,11 @@ def get_commands   ( commands ):
 
 		if is_directory ( arguments [ 'source'] ):
 
-			arguments [ 'destination' ] = f"{arguments [ 'source' ]}/_output"
+			arguments [ 'destination' ] = f"{arguments [ 'source' ]}/text"
 
 		elif is_file ( arguments [ 'source' ], None ):
 
-			arguments [ 'destination' ] = f"{os.path.dirname ( arguments [ 'source' ] )}/_output"
+			arguments [ 'destination' ] = f"{os.path.dirname ( arguments [ 'source' ] )}/text"
 
 
 	return arguments

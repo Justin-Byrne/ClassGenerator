@@ -1,6 +1,26 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.10.15] - 2024-08-13
+### Added
+- :blossom: `Generator` class, `get_validators ( )`: to get validators in submitted class(es)
+- :sunny: `replace_value ( )` utility: to replace a value within a list
+
+### Refactored
+- :last_quarter_moon: `Generator` class
+  - `prepare_file ( )` - modified to save files to a 'text' sub-directory
+  - `compose_image ( )` - modified to save images to a 'image' sub-directory
+- :last_quarter_moon: `Linker` class,
+  - `get_classes ( )` - modified to search for files in newly set 'text' sub-directory
+  - `set_regexes ( )` - modified to identify arrow types, sub-types, or encapsulated types
+  - `link_objects ( )` - modified to save linked texts in newly set 'text' sub-directory
+  - `compose_image ( )` - modified to save linked images to newly set 'text' sub-directory
+- :last_quarter_moon: `filter_type` utility - modified type list to include 'Object' as a type
+- :last_quarter_moon: `get_commands` utility - modified destination argument to include 'text' as a sub-directory, when a destination isn't provided
+
+### Fixed
+- :dragon: `Linker` class, `get_classes ( )` - fixed '|||' aberration
+
 ## [0.9.9] - 2023-10-17
 ### Added
 - `Linker` class, `set_regexes ( )` function to set regexes for each identified class
@@ -193,7 +213,8 @@ All notable changes to this project will be documented in this file.
 
 | Version | Date       | Commit                                                                   | Comments                                                          |
 | :-----: | :--------: | :----------------------------------------------------------------------: | :---------------------------------------------------------------- |
-| 0.9.9   | 2023-10-17 | Current                                                                  | Fixed linker class issues
+| 0.10.15 | 2024-08-13 | Current                                                                  | Added identification of validators
+| 0.9.9   | 2023-10-17 | [17c1b1a](https://github.com/Justin-Byrne/ClassGenerator/commit/17c1b1a) | Fixed linker class issues
 | 0.8.9   | 2023-10-11 | [cd79df5](https://github.com/Justin-Byrne/ClassGenerator/commit/cd79df5) | Refactored linker class
 | 0.8.8   | 2023-10-11 | [6154c3e](https://github.com/Justin-Byrne/ClassGenerator/commit/6154c3e) | Major refactoring of project
 | 0.7.7   | 2023-05-03 | [bb4ef56](https://github.com/Justin-Byrne/ClassGenerator/commit/bb4ef56) | PlantUml program executable location management
@@ -212,12 +233,13 @@ All notable changes to this project will be documented in this file.
 ---
 
 ## Types of changes
-- `Added` for new features.
-- `Changed` for changes in existing functionality.
-- `Deprecated` for soon-to-be removed features.
-- `Removed` for now removed features.
-- `Fixed` for any bug fixes.
-- `Security` in case of vulnerabilities.
+- `Added` added features.
+- `Changed` changes to function calls, names, or placement.
+- `Deprecated` soon-to-be removed features.
+- `Fixed` bug fixes.
+- `Refactored` refactoring functionality.
+- `Removed` removed features.
+- `Security` securing vulnerabilities.
 
 ## Copyright
 

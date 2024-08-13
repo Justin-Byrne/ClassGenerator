@@ -17,6 +17,7 @@ from .custom.debug.view_arguments       import view_arguments
 from .custom.filter.filter_properties   import filter_properties
 from .custom.filter.filter_type         import filter_type
 from .custom.list.get_column_max        import get_column_max
+from .custom.list.replace_value         import replace_value
 
 class Util:
 
@@ -71,3 +72,5 @@ class Util:
     # LIST
 
     def get_column_max     ( dictionary )                           : return get_column_max     ( dictionary )
+
+    def replace_value      ( list, to_replace, replace_with )       : return replace_value      ( list, to_replace, replace_with )

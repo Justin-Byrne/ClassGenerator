@@ -26,4 +26,4 @@ skinparam DefaultFontName Courier New
 # braille
 
 ####	PLANTUML PATH
-# path=~/Programs/Tools/PlantUML
+path=~/Programs/Tools/PlantUML

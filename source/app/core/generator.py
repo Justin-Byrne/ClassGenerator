@@ -30,6 +30,7 @@ class Generator:
             'properties': '',
             'setters':    '__ Setter __',
             'getters':    '__ Getter __',
+            'validators': '__ Validation __',
             'utilities':  '__ Utility __'
         }
 
@@ -40,6 +41,8 @@ class Generator:
     ####    INITIATORS  ########################################################
 
     def init    ( self ):
+
+        # Util.view_arguments ( self.arguments )
 
         self.get_files ( )
 
@@ -74,6 +77,11 @@ class Generator:
                 'names': [ ],
                 'types': [ ]
             },
+            'validators':
+            {
+                'names': [ ],
+                'types': [ ]
+            },
             'utilities':
             {
                 'names': [ ],
@@ -88,6 +96,8 @@ class Generator:
         self.get_properties ( file )
 
         self.get_mutators   ( file )
+
+        self.get_validators ( file )
 
         self.get_utilities  ( file )
 
@@ -204,7 +214,7 @@ class Generator:
 
             # Docstring
 
-            regex    = r'@param\s*\{(\w+)\}[^\/]+\/[^s]+set\s(\w+)' if mutator == 'set' else r'@return\s*{(\w+)}[^\/]+\/[^g]+get\s(\w+)'
+            regex    = r'@param\s*{(.*)}[^\/]+\/[^s]+set\s(\w+)' if mutator == 'set' else r'@return\s*{(.*)}[^\/]+\/[^g]+get\s(\w+)'
 
             mutators = re.findall ( regex, data )
 
@@ -232,6 +242,41 @@ class Generator:
                     self.template [ mutator_type ] [ 'types' ].append ( None  )
 
 
+    def get_validators  ( self, file ):
+
+        data  = open ( file, 'r' ).read ( )
+
+
+        # Docstring
+
+        regex      = r'@return\s*{(\w+)}[^\/]+\/\s*\b(?!return\b|let\b|this\b|if\b|switch\b|for\b)(_?is\w+)\s*\([^\)]+\)'
+
+        validators = re.findall ( regex, data )
+
+
+        for value in validators:
+
+            self.template [ 'validators' ] [ 'names' ].append ( value [ 1 ] )
+
+            self.template [ 'validators' ] [ 'types' ].append ( value [ 0 ] )
+
+
+        # Vanilla
+
+        regex      = r'\s{2,4}\b(?!constructor\b|return\b|let\b|this\b|if\b|switch\b|for\b|super\b|set\b|get\b)(_?is\w+)\s*\([^\)]+\)'
+
+        validators = re.findall ( regex, data )
+
+
+        for value in validators:
+
+            if value not in self.template [ 'validators' ] [ 'names' ]:
+
+                self.template [ 'validators' ] [ 'names' ].append ( value )
+
+                self.template [ 'validators' ] [ 'types' ].append ( None  )
+
+
     def get_utilities  ( self, file ):
 
         data  = open ( file, 'r' ).read ( )
@@ -239,7 +284,7 @@ class Generator:
 
         # Docstring
 
-        regex     = r'@return\s*{(\w+)}[^\/]+\/\s*\b(?!return\b|let\b|this\b|if\b|switch\b|for\b)(\w+)\s*\([^\)]+\)'
+        regex     = r'@return\s*{(\w+)}[^\/]+\/\s*\b(?!return\b|let\b|this\b|if\b|switch\b|for\b|_?is\w+\b)(\w+)\s*\([^\)]+\)'
 
         utilities = re.findall ( regex, data )
 
@@ -253,7 +298,7 @@ class Generator:
 
         # Vanilla
 
-        regex     = r'\s{2,4}\b(?!constructor\b|return\b|let\b|this\b|if\b|switch\b|for\b)(\w+)\s*\([^\)]+\)'
+        regex     = r'\s{2,4}\b(?!constructor\b|return\b|let\b|this\b|if\b|switch\b|for\b|super\b|set\b|get\b|_?is\w+\b)(\w+)\s*\([^\)]+\)'
 
         utilities = re.findall ( regex, data )
 
@@ -270,7 +315,7 @@ class Generator:
 
     def prepare_file    ( self, file ):
 
-        self.output_path = Util.set_file ( file, self.arguments [ 'destination'] )
+        self.output_path = Util.set_file ( file, f"{self.arguments [ 'destination' ]}/text" )
 
         open ( self.output_path, 'w+' )
 
@@ -347,7 +392,7 @@ class Generator:
 
             for image_type in self.arguments [ 'make_image' ]:
 
-                output_path = f"{os.path.dirname ( self.output_path )}/images"
+                output_path = f"{self.arguments [ 'destination' ]}/image"
 
                 command     = f"java -jar {self.arguments [ 'plant_path' ]} \"{self.output_path}\" -o \"{output_path}\" -{image_type}"
 

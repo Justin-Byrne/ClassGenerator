@@ -1,6 +1,6 @@
 def filter_type ( type ):
 
-    if type in [ 'number', 'string', 'boolean', 'Object' ]:
+    if type in [ 'number', 'string', 'boolean' ]:
 
         return f"<color:gray>{{{type}}}</color>"
 
